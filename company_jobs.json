@@ -1,0 +1,1704 @@
+[
+  {
+    "id": "C001",
+    "name": "TCS",
+    "industry": "IT Services",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C002",
+    "name": "Infosys",
+    "industry": "IT Services",
+    "role": "Systems Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C003",
+    "name": "Wipro",
+    "industry": "IT Services",
+    "role": "Project Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C004",
+    "name": "HCLTech",
+    "industry": "IT Services",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "C++",
+      "SQL"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "No",
+    "backlogsAllowed": "No",
+    "location": "Noida",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C005",
+    "name": "Tech Mahindra",
+    "industry": "IT Services",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Pune",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C006",
+    "name": "Accenture",
+    "industry": "IT Services",
+    "role": "Application Developer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C007",
+    "name": "Cognizant",
+    "industry": "IT Services",
+    "role": "Programmer Analyst",
+    "skills": [
+      "Java",
+      "SQL",
+      "Python"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Chennai",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C008",
+    "name": "Capgemini",
+    "industry": "IT Services",
+    "role": "Analyst",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C009",
+    "name": "LTIMindtree",
+    "industry": "IT Services",
+    "role": "Graduate Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "No",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C010",
+    "name": "Mphasis",
+    "industry": "IT Services",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "Cloud"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C011",
+    "name": "Persistent Systems",
+    "industry": "IT Services",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "React"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Pune",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C012",
+    "name": "Coforge",
+    "industry": "IT Services",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "SQL",
+      "Python"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Noida",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C013",
+    "name": "Birlasoft",
+    "industry": "IT Services",
+    "role": "Associate Consultant",
+    "skills": [
+      "Java",
+      "SQL",
+      "Cloud"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Pune",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C014",
+    "name": "Hexaware Technologies",
+    "industry": "IT Services",
+    "role": "Trainee Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Chennai",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C015",
+    "name": "CitiusTech",
+    "industry": "Healthcare IT",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Mumbai",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C016",
+    "name": "UST",
+    "industry": "IT Services",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Thiruvananthapuram",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C017",
+    "name": "IBS Software",
+    "industry": "Travel Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Spring Boot",
+      "SQL"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Kochi",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C018",
+    "name": "Quest Global",
+    "industry": "Engineering Services",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Python",
+      "Embedded"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "Yes",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C019",
+    "name": "Marlabs",
+    "industry": "IT Services",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C020",
+    "name": "Sonata Software",
+    "industry": "IT Services",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Cloud",
+      "SQL"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C021",
+    "name": "Oracle",
+    "industry": "Enterprise Software",
+    "role": "Software Developer",
+    "skills": [
+      "Java",
+      "SQL",
+      "Cloud"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C022",
+    "name": "IBM",
+    "industry": "Technology",
+    "role": "Software Developer",
+    "skills": [
+      "Java",
+      "Python",
+      "Cloud"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C023",
+    "name": "Microsoft",
+    "industry": "Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Python",
+      "DSA"
+    ],
+    "minimumCgpa": 8.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Hyderabad",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C024",
+    "name": "Google",
+    "industry": "Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Java",
+      "DSA"
+    ],
+    "minimumCgpa": 8.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C025",
+    "name": "Amazon",
+    "industry": "E-commerce/Cloud",
+    "role": "Software Development Engineer",
+    "skills": [
+      "Java",
+      "C++",
+      "Python",
+      "DSA"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C026",
+    "name": "Adobe",
+    "industry": "Software",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Java",
+      "Python"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Noida",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C027",
+    "name": "Salesforce",
+    "industry": "Cloud/SaaS",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "JavaScript",
+      "SQL"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C028",
+    "name": "SAP",
+    "industry": "Enterprise Software",
+    "role": "Developer",
+    "skills": [
+      "Java",
+      "SQL",
+      "Cloud"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C029",
+    "name": "Cisco",
+    "industry": "Networking",
+    "role": "Software Engineer",
+    "skills": [
+      "Python",
+      "C++",
+      "Networking"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C030",
+    "name": "Dell Technologies",
+    "industry": "Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Python",
+      "Linux"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C031",
+    "name": "Hewlett Packard Enterprise",
+    "industry": "Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "Python",
+      "Linux",
+      "Cloud"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C032",
+    "name": "NVIDIA",
+    "industry": "Semiconductors/AI",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "CUDA",
+      "Python"
+    ],
+    "minimumCgpa": 8.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C033",
+    "name": "Intel",
+    "industry": "Semiconductors",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Python",
+      "Linux"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C034",
+    "name": "Qualcomm",
+    "industry": "Semiconductors",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Embedded",
+      "Linux"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Hyderabad",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C035",
+    "name": "AMD",
+    "industry": "Semiconductors",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Python",
+      "Linux"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C036",
+    "name": "Broadcom",
+    "industry": "Semiconductors",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Linux",
+      "Networking"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C037",
+    "name": "Arm",
+    "industry": "Semiconductors",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Linux",
+      "Embedded"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C038",
+    "name": "Siemens",
+    "industry": "Engineering/Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Python",
+      "Java"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C039",
+    "name": "Bosch",
+    "industry": "Automotive Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Embedded",
+      "Python"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C040",
+    "name": "Continental",
+    "industry": "Automotive Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Embedded",
+      "Linux"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C041",
+    "name": "Mercedes-Benz Research",
+    "industry": "Automotive Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Python",
+      "Embedded"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C042",
+    "name": "BMW TechWorks",
+    "industry": "Automotive Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "C++",
+      "Cloud"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C043",
+    "name": "Volvo Group",
+    "industry": "Automotive Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Python",
+      "Embedded"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C044",
+    "name": "Ericsson",
+    "industry": "Telecommunications",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "Networking"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C045",
+    "name": "Nokia",
+    "industry": "Telecommunications",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Python",
+      "Networking"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C046",
+    "name": "Airtel",
+    "industry": "Telecommunications",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "Cloud"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Gurugram",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C047",
+    "name": "Jio Platforms",
+    "industry": "Technology/Telecom",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "React"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Mumbai",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C048",
+    "name": "Vodafone Idea",
+    "industry": "Telecommunications",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "SQL",
+      "Cloud"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Pune",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C049",
+    "name": "Zoho",
+    "industry": "Software",
+    "role": "Software Developer",
+    "skills": [
+      "Java",
+      "C++",
+      "SQL"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "No",
+    "location": "Chennai",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C050",
+    "name": "Freshworks",
+    "industry": "SaaS",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "JavaScript"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Chennai",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C051",
+    "name": "Razorpay",
+    "industry": "Fintech",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "React"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C052",
+    "name": "PhonePe",
+    "industry": "Fintech",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C053",
+    "name": "Paytm",
+    "industry": "Fintech",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Noida",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C054",
+    "name": "Flipkart",
+    "industry": "E-commerce",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C055",
+    "name": "Swiggy",
+    "industry": "Food Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "React"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C056",
+    "name": "Zomato",
+    "industry": "Food Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Gurugram",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C057",
+    "name": "Myntra",
+    "industry": "E-commerce",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "React"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C058",
+    "name": "Meesho",
+    "industry": "E-commerce",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C059",
+    "name": "BrowserStack",
+    "industry": "Developer Tools",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "Selenium"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Mumbai",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C060",
+    "name": "Postman",
+    "industry": "Developer Tools",
+    "role": "Software Engineer",
+    "skills": [
+      "JavaScript",
+      "Node.js",
+      "Python"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C061",
+    "name": "Chargebee",
+    "industry": "SaaS",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "React"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Chennai",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C062",
+    "name": "Deloitte",
+    "industry": "Consulting/IT",
+    "role": "Technology Analyst",
+    "skills": [
+      "Python",
+      "SQL",
+      "Cloud"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C063",
+    "name": "EY",
+    "industry": "Consulting/IT",
+    "role": "Technology Consultant",
+    "skills": [
+      "Python",
+      "SQL",
+      "Cloud"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Kochi",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C064",
+    "name": "KPMG",
+    "industry": "Consulting/IT",
+    "role": "Technology Analyst",
+    "skills": [
+      "Python",
+      "SQL",
+      "Data Analytics"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C065",
+    "name": "PwC",
+    "industry": "Consulting/IT",
+    "role": "Technology Consultant",
+    "skills": [
+      "Python",
+      "SQL",
+      "Cloud"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C066",
+    "name": "Grant Thornton",
+    "industry": "Consulting/IT",
+    "role": "Technology Analyst",
+    "skills": [
+      "Python",
+      "SQL",
+      "Data Analytics"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C067",
+    "name": "Protiviti",
+    "industry": "Consulting/IT",
+    "role": "Technology Consultant",
+    "skills": [
+      "Python",
+      "SQL",
+      "Cybersecurity"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "Yes",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C068",
+    "name": "Kyndryl",
+    "industry": "IT Infrastructure",
+    "role": "Cloud Engineer",
+    "skills": [
+      "Linux",
+      "Python",
+      "Cloud"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C069",
+    "name": "NTT DATA",
+    "industry": "IT Services",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C070",
+    "name": "CGI",
+    "industry": "IT Services",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "SQL",
+      "Cloud"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C071",
+    "name": "Sopra Steria",
+    "industry": "IT Services",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Noida",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C072",
+    "name": "DXC Technology",
+    "industry": "IT Services",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "Cloud"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C073",
+    "name": "EPAM Systems",
+    "industry": "IT Services",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "React"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Hyderabad",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C074",
+    "name": "Thoughtworks",
+    "industry": "IT Services",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "TDD"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C075",
+    "name": "Publicis Sapient",
+    "industry": "Digital Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "React",
+      "Python"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C076",
+    "name": "Finastra",
+    "industry": "Fintech Software",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "SQL",
+      "Cloud"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C077",
+    "name": "Temenos",
+    "industry": "Fintech Software",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "SQL",
+      "Cloud"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C078",
+    "name": "Fidelity Investments",
+    "industry": "Financial Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C079",
+    "name": "Goldman Sachs",
+    "industry": "Finance/Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "C++",
+      "Python",
+      "DSA"
+    ],
+    "minimumCgpa": 8.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C080",
+    "name": "JPMorgan Chase",
+    "industry": "Finance/Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C081",
+    "name": "Morgan Stanley",
+    "industry": "Finance/Technology",
+    "role": "Technology Analyst",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Mumbai",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C082",
+    "name": "Wells Fargo",
+    "industry": "Finance/Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C083",
+    "name": "American Express",
+    "industry": "Finance/Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C084",
+    "name": "Mastercard",
+    "industry": "Payments Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "Cloud"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Pune",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C085",
+    "name": "Visa",
+    "industry": "Payments Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "C++",
+      "Python"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C086",
+    "name": "Walmart Global Tech",
+    "industry": "Retail Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C087",
+    "name": "Target",
+    "industry": "Retail Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C088",
+    "name": "Intellicon",
+    "industry": "Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C089",
+    "name": "Mindtickle",
+    "industry": "SaaS",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "React"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Pune",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C090",
+    "name": "Sprinklr",
+    "industry": "SaaS",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "JavaScript",
+      "Python"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Gurugram",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C091",
+    "name": "InMobi",
+    "industry": "AdTech",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 7.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C092",
+    "name": "Moglix",
+    "industry": "E-commerce",
+    "role": "Software Engineer",
+    "skills": [
+      "Java",
+      "Python",
+      "SQL"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "No",
+    "backlogsAllowed": "Yes",
+    "location": "Noida",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C093",
+    "name": "Ola Electric",
+    "industry": "Automotive Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Python",
+      "Embedded"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C094",
+    "name": "Ather Energy",
+    "industry": "Automotive Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Python",
+      "Embedded"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C095",
+    "name": "TVS Motor",
+    "industry": "Automotive Technology",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Embedded",
+      "Python"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Chennai",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C096",
+    "name": "Tata Elxsi",
+    "industry": "Engineering Services",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Python",
+      "Embedded"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C097",
+    "name": "KPIT Technologies",
+    "industry": "Automotive Software",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Embedded",
+      "AUTOSAR"
+    ],
+    "minimumCgpa": 7.0,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Pune",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C098",
+    "name": "LTTS",
+    "industry": "Engineering Services",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Python",
+      "Embedded"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C099",
+    "name": "Motherson Technology Services",
+    "industry": "Engineering Services",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Embedded",
+      "Python"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "Yes",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  },
+  {
+    "id": "C100",
+    "name": "Sasken Technologies",
+    "industry": "Engineering Services",
+    "role": "Software Engineer",
+    "skills": [
+      "C++",
+      "Embedded",
+      "Linux"
+    ],
+    "minimumCgpa": 6.5,
+    "internshipRequired": "Preferred",
+    "backlogsAllowed": "No",
+    "location": "Bengaluru",
+    "experience": "Fresher",
+    "jobType": "Full-time"
+  }
+]

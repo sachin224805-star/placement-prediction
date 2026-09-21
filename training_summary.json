@@ -1,0 +1,10 @@
+{
+  "source": "C:\\Users\\perfect\\Documents\\Department_Placement_new_24-25_csAandcsB.xlsx",
+  "companies": 36,
+  "reported_selections": 92,
+  "note": "Aggregate offer data only; no individual student placement labels were available for model training.",
+  "base_student_records": 1000,
+  "academic_report_records": 129,
+  "backlog_training_records": 1129,
+  "placement_training_records": 1000
+}

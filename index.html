@@ -1,0 +1,2340 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Student placement and backlog prediction workspace.">
+  <title>Placement Compass</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --canvas-glow: radial-gradient(900px 420px at 85% -10%, #e9edfb 0%, rgba(233, 237, 251, 0) 60%);
+      --panel: #ffffff;
+      --line: #e0e4f0;
+      --line-strong: #c9d0e3;
+      --ink: #17214d;
+      --ink-soft: #44506f;
+      --muted: #68718a;
+      --forest: #1f2f78;
+      --forest-deep: #17245e;
+      --forest-soft: #e9edfa;
+      --mint: #dfe6fa;
+      --teal: #3656b3;
+      --amber: #b98516;
+      --amber-bg: #fff4d9;
+      --red: #b83b38;
+      --red-bg: #fdebe8;
+      --radius-lg: 22px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --shadow-panel: 0 1px 2px rgba(23, 33, 77, .05), 0 12px 32px -12px rgba(23, 33, 77, .14);
+      --shadow-pop: 0 2px 4px rgba(23, 33, 77, .06), 0 18px 44px -14px rgba(23, 33, 77, .22);
+      --ring: 0 0 0 4px rgba(31, 47, 120, .14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      background-image: var(--canvas-glow);
+      color: var(--ink);
+      font: 15px/1.5 "Inter", ui-sans-serif, system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .login-screen {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr);
+      background: #f6f7fb;
+    }
+
+    .login-identity {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 100%;
+      padding: 48px clamp(32px, 7vw, 108px);
+      color: #fff;
+      background: #1f2f78;
+    }
+
+    .college-brand, .login-college {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .college-brand img, .login-college img {
+      width: 54px;
+      height: 54px;
+      object-fit: contain;
+      border-radius: 50%;
+      background: #fff;
+      padding: 3px;
+    }
+
+    .college-brand span, .login-college span { font: 700 16px/1.25 "Space Grotesk", sans-serif; }
+    .college-brand small { display: block; margin-top: 3px; color: #d8e1ff; font: 500 12px "Inter", sans-serif; }
+
+    .login-message { max-width: 530px; padding-bottom: 10vh; }
+    .login-message p { margin: 0 0 13px; color: #f0c24f; font-weight: 700; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+    .login-message h1 { margin: 0; font-size: clamp(34px, 4vw, 56px); letter-spacing: 0; }
+    .login-message span { display: block; max-width: 440px; margin-top: 18px; color: #e7ebfb; font-size: 16px; }
+    .login-footer { color: #f0c24f; font-size: 13px; }
+
+    .login-panel {
+      display: grid;
+      place-items: center;
+      padding: 32px;
+      background: #fff;
+    }
+
+    .login-form { width: min(100%, 390px); }
+    .login-mode { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin: 0 0 24px; padding: 4px; border-radius: 8px; background: #edf2ff; }
+    .login-mode button { height: 36px; border: 0; border-radius: 6px; background: transparent; color: var(--ink-soft); font-size: 13px; font-weight: 700; }
+    .login-mode button.active { background: #fff; color: var(--forest); box-shadow: 0 1px 3px rgba(23, 33, 77, .12); }
+    #admin-login-form { display: none; }
+    .login-panel.admin-mode #login-form { display: none; }
+    .login-panel.admin-mode #admin-login-form { display: block; }
+    .login-college { margin-bottom: 38px; color: var(--ink); }
+    .login-college img { width: 48px; height: 48px; }
+    .login-form h2 { margin-bottom: 8px; font-size: 27px; }
+    .login-form > p { margin: 0 0 28px; color: var(--muted); }
+    .login-field { margin-bottom: 18px; }
+    .login-field label { display: block; margin-bottom: 7px; color: var(--ink-soft); font-size: 13px; font-weight: 700; }
+    .login-field input { width: 100%; height: 48px; padding: 0 13px; border: 1px solid var(--line-strong); border-radius: 8px; color: var(--ink); outline: none; }
+    .login-field input:focus { border-color: var(--forest); box-shadow: var(--ring); }
+    .login-submit { display: flex; align-items: center; justify-content: center; gap: 9px; width: 100%; height: 48px; margin-top: 10px; border: 0; border-radius: 8px; background: var(--forest); color: #fff; font-weight: 700; }
+    .login-submit:hover { background: var(--forest-deep); }
+    .login-error { min-height: 20px; margin: 13px 0 0; color: var(--red); font-size: 13px; }
+
+    .app-shell { display: none; }
+    body.authenticated .login-screen { display: none; }
+    body.authenticated .app-shell { display: flex; }
+
+    .brand-logo { width: 39px; height: 39px; object-fit: contain; border-radius: 50%; background: #fff; border: 1px solid var(--line); }
+    .topbar-actions { display: flex; align-items: center; gap: 10px; }
+    .icon-button { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink-soft); }
+    .icon-button:hover { color: var(--forest); border-color: var(--forest); }
+    .icon-button i { width: 17px; height: 17px; }
+
+    .profile-input { width: 100%; height: 42px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 8px; background: #fff; color: var(--ink); outline: none; }
+    .profile-input:focus { border-color: var(--forest); box-shadow: var(--ring); }
+    .profile-help { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; min-height: 8px; margin-top: 9px; }
+    .skill-tag { display: inline-flex; align-items: center; gap: 4px; padding: 4px 7px 4px 9px; border-radius: 6px; background: var(--forest-soft); color: var(--forest-deep); font-size: 12px; font-weight: 700; }
+    .skill-tag button { display: grid; place-items: center; width: 15px; height: 15px; padding: 0; border: 0; border-radius: 3px; background: transparent; color: inherit; }
+    .skill-tag i { width: 13px; height: 13px; }
+
+    .company-finder { margin-top: 34px; padding: 28px; }
+    .company-finder-head { display: flex; justify-content: space-between; align-items: start; gap: 22px; margin-bottom: 20px; }
+    .company-finder-head h2 { display: flex; align-items: center; gap: 9px; }
+    .company-finder-head h2 i { width: 20px; color: var(--forest); }
+    .company-finder-head p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+    .company-search { position: relative; width: min(100%, 340px); }
+    .company-search i { position: absolute; top: 12px; left: 12px; width: 18px; color: var(--muted); }
+    .company-search input { width: 100%; height: 42px; padding: 0 12px 0 38px; border: 1px solid var(--line-strong); border-radius: 8px; outline: none; }
+    .company-search input:focus { border-color: var(--forest); box-shadow: var(--ring); }
+    .company-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .company-item { position: relative; min-height: 142px; padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+    .company-item.applied { border-color: var(--forest); box-shadow: inset 3px 0 var(--forest); }
+    .company-item h3 { margin: 0 0 5px; font: 700 15px "Space Grotesk", sans-serif; }
+    .company-item p { margin: 0; color: var(--ink-soft); font-size: 13px; }
+    .company-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 13px; }
+    .company-meta span { padding: 3px 6px; border-radius: 5px; background: #f1f5f2; color: var(--muted); font-size: 11px; font-weight: 700; }
+    .company-meta .match { background: var(--forest-soft); color: var(--forest-deep); }
+    .company-empty { grid-column: 1 / -1; padding: 20px 0; color: var(--muted); text-align: center; }
+    .admin-dashboard { display: none; width: min(1520px, calc(100% - 56px)); margin: 0 auto; padding: 38px 0 76px; }
+    body.admin .student-main, body.admin .student-footer { display: none; }
+    body.admin .admin-dashboard { display: block; }
+    .admin-hero { display: flex; align-items: end; justify-content: space-between; gap: 24px; padding: 32px 36px; border-radius: 12px; background: #1f347e; color: #fff; }
+    .admin-hero h1 { margin: 0; color: #fff; font-size: 34px; letter-spacing: 0; }
+    .admin-hero p { margin: 8px 0 0; color: #dce5ff; }
+    .admin-count { padding: 8px 12px; border-radius: 7px; background: #fff; color: var(--forest); font-size: 13px; font-weight: 700; white-space: nowrap; }
+    .admin-filters { display: grid; grid-template-columns: minmax(0, 2fr) 180px 150px; gap: 12px; padding: 22px 0; }
+    .admin-filters input, .admin-filters select { width: 100%; height: 44px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 8px; background: #fff; color: var(--ink); outline: none; }
+    .admin-filters input:focus, .admin-filters select:focus { border-color: var(--forest); box-shadow: var(--ring); }
+    .student-directory { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .student-result { padding: 18px; border: 1px solid var(--line); border-radius: 10px; background: #fff; box-shadow: var(--shadow-panel); }
+    .student-result h3 { margin: 0; color: var(--ink); font: 700 17px "Space Grotesk", sans-serif; }
+    .student-result > p { margin: 4px 0 14px; color: var(--muted); font-size: 13px; }
+    .student-data { display: grid; gap: 8px; color: var(--ink-soft); font-size: 12px; }
+    .student-data strong { color: var(--ink); }
+    .student-data span { overflow-wrap: anywhere; }
+    .directory-empty { grid-column: 1 / -1; padding: 46px; border: 1px dashed var(--line-strong); border-radius: 10px; color: var(--muted); text-align: center; }
+
+    @media (max-width: 760px) {
+      .login-screen { grid-template-columns: 1fr; }
+      .login-identity { min-height: auto; padding: 28px 26px 38px; }
+      .login-message { padding: 54px 0 0; }
+      .login-footer { display: none; }
+      .login-panel { padding: 40px 26px; }
+      .company-finder-head { align-items: stretch; flex-direction: column; }
+      .company-search { width: 100%; }
+      .company-list { grid-template-columns: 1fr; }
+      .admin-dashboard { width: min(100% - 28px, 1520px); padding-top: 20px; }
+      .admin-hero { align-items: start; flex-direction: column; padding: 28px 24px; }
+      .admin-filters, .student-directory { grid-template-columns: 1fr; }
+    }
+
+    /* ---------- Top bar ---------- */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+      padding: 0 max(24px, calc((100% - 1180px) / 2));
+      background: rgba(255, 255, 255, .82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(227, 234, 229, .9);
+    }
+
+    .brand {
+      display: flex;
+      gap: 11px;
+      align-items: center;
+      color: var(--ink);
+      font: 700 18px "Space Grotesk", sans-serif;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      color: #fff;
+      background: linear-gradient(135deg, #3656b3 0%, #1f2f78 100%);
+      box-shadow: 0 6px 14px -6px rgba(31, 47, 120, .55);
+    }
+
+    .brand-mark i {
+      width: 20px;
+      height: 20px;
+    }
+
+    .status {
+      display: flex;
+      gap: 9px;
+      align-items: center;
+      padding: 7px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--ink-soft);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22a06b;
+      box-shadow: 0 0 0 3px rgba(34, 160, 107, .18);
+    }
+
+    main {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 44px 0 60px;
+      flex: 1;
+    }
+
+    /* ---------- Hero ---------- */
+    .intro {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin: 0 0 10px;
+      color: var(--forest);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 18px;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--forest);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font: 700 clamp(30px, 4.4vw, 46px)/1.08 "Space Grotesk", sans-serif;
+      letter-spacing: -0.02em;
+    }
+
+    .intro p {
+      max-width: 620px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--ink-soft);
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: var(--shadow-panel);
+    }
+
+    .chip i {
+      width: 16px;
+      height: 16px;
+      color: var(--forest);
+    }
+
+    /* ---------- Workspace ---------- */
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(330px, .95fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-panel);
+    }
+
+    /* ---------- Form ---------- */
+    .form-panel {
+      padding: 30px;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h2 {
+      margin: 0;
+      font: 700 19px "Space Grotesk", sans-serif;
+      letter-spacing: -0.01em;
+    }
+
+    .step {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 28px;
+    }
+
+    .form-section {
+      padding: 26px 0 6px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .form-section.full {
+      grid-column: 1 / -1;
+      padding-bottom: 22px;
+    }
+
+    .form-section:last-of-type {
+      border: 0;
+    }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 20px;
+      color: var(--ink);
+      font: 700 14px "Space Grotesk", sans-serif;
+    }
+
+    .section-label .icon-box {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      background: var(--forest-soft);
+      color: var(--forest);
+    }
+
+    .section-label .icon-box i {
+      width: 16px;
+      height: 16px;
+    }
+
+    .field {
+      margin-bottom: 21px;
+    }
+
+    .field:last-child {
+      margin-bottom: 0;
+    }
+
+    .field-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 10px;
+    }
+
+    label {
+      color: var(--ink-soft);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    select {
+      display: block;
+      width: 100%;
+      height: 46px;
+      padding: 0 36px 0 14px;
+      color: var(--ink);
+      border: 1px solid var(--line-strong);
+      border-radius: 11px;
+      background: #fcfdfc url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7b72' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center;
+      font-weight: 500;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+      transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
+    }
+
+    select:hover {
+      border-color: #b9c6bd;
+    }
+
+    select:focus {
+      border-color: var(--forest);
+      background-color: #fff;
+      box-shadow: var(--ring);
+    }
+
+    .range-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      appearance: none;
+      -webkit-appearance: none;
+      background: linear-gradient(to right, var(--forest) var(--fill, 60%), #e2e9e4 var(--fill, 60%));
+      border-radius: 6px;
+      outline: none;
+      transition: background .2s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      width: 20px;
+      height: 20px;
+      appearance: none;
+      -webkit-appearance: none;
+      border: 3px solid #fff;
+      border-radius: 50%;
+      background: var(--forest);
+      box-shadow: 0 2px 6px rgba(14, 107, 76, .4), 0 0 0 1px var(--forest);
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.12);
+      box-shadow: 0 3px 10px rgba(14, 107, 76, .5), 0 0 0 1px var(--forest);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      border: 3px solid #fff;
+      border-radius: 50%;
+      background: var(--forest);
+      box-shadow: 0 2px 6px rgba(14, 107, 76, .4), 0 0 0 1px var(--forest);
+    }
+
+    input[type="range"]:focus-visible {
+      box-shadow: var(--ring);
+      border-radius: 6px;
+    }
+
+    output {
+      display: grid;
+      place-items: center;
+      flex: 0 0 60px;
+      height: 34px;
+      color: var(--forest-deep);
+      background: var(--mint);
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .subject-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .subject-card {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: #fcfdfc;
+    }
+
+    .subject-card h3 {
+      margin: 0 0 12px;
+      font: 700 14px "Space Grotesk", sans-serif;
+      color: var(--ink);
+    }
+
+    .subject-card .field {
+      margin-bottom: 12px;
+    }
+
+    .subject-card .field:last-child {
+      margin-bottom: 0;
+    }
+
+    .subject-card output {
+      flex-basis: 52px;
+    }
+
+    /* ---------- Subject risk results ---------- */
+    .subject-results {
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .subject-results-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .subject-results-head h3 {
+      margin: 0;
+      font: 700 14px "Space Grotesk", sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .subject-results-head h3 i {
+      width: 16px;
+      height: 16px;
+      color: var(--forest);
+    }
+
+    .count-badge {
+      padding: 5px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--forest-soft);
+      color: var(--forest-deep);
+    }
+
+    .count-badge.warn {
+      background: var(--red-bg);
+      color: var(--red);
+    }
+
+    .subject-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .subject-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 13px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #fff;
+      animation: rise .4s ease both;
+    }
+
+    .subject-item .subject-dot {
+      flex: 0 0 auto;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #22a06b;
+    }
+
+    .subject-item.risk .subject-dot {
+      background: var(--red);
+      box-shadow: 0 0 0 4px rgba(184, 59, 56, .12);
+    }
+
+    .subject-item .subject-name {
+      flex: 1;
+      min-width: 0;
+      font-weight: 600;
+      font-size: 13.5px;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .subject-item .subject-meta {
+      color: var(--muted);
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .subject-item .subject-risk {
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .subject-item.risk .subject-risk {
+      color: var(--red);
+    }
+
+    .subject-item.ok .subject-risk {
+      color: var(--forest);
+    }
+
+    .binary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .binary button {
+      min-height: 46px;
+      padding: 0 12px;
+      color: var(--ink-soft);
+      border: 1px solid var(--line-strong);
+      border-radius: 11px;
+      background: #fcfdfc;
+      font-weight: 600;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all .18s ease;
+    }
+
+    .binary button i {
+      width: 16px;
+      height: 16px;
+      opacity: 0;
+      transition: opacity .18s ease;
+    }
+
+    .binary button:hover {
+      border-color: #b9c6bd;
+      background: #fff;
+    }
+
+    .binary button.active {
+      color: #0a5338;
+      border-color: #a8d8bd;
+      background: var(--mint);
+      box-shadow: 0 0 0 1px #a8d8bd inset;
+    }
+
+    .binary button.active i {
+      opacity: 1;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+    }
+
+    .button {
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 0 22px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      transition: transform .14s ease, box-shadow .18s ease, background-color .18s ease, border-color .18s ease;
+    }
+
+    .button:active {
+      transform: scale(.97);
+    }
+
+    .button i {
+      width: 18px;
+      height: 18px;
+    }
+
+    .button.secondary {
+      color: var(--ink-soft);
+      border: 1px solid var(--line-strong);
+      background: #fff;
+    }
+
+    .button.secondary:hover {
+      border-color: #b9c6bd;
+      background: #fafcfa;
+    }
+
+    .button.primary {
+      color: #fff;
+      border: 1px solid transparent;
+      background: linear-gradient(135deg, #3656b3 0%, #1f2f78 100%);
+      box-shadow: 0 10px 22px -10px rgba(14, 107, 76, .65);
+    }
+
+    .button.primary:hover {
+      background: linear-gradient(135deg, #128a63 0%, #0c6044 100%);
+      box-shadow: 0 14px 28px -10px rgba(14, 107, 76, .7);
+    }
+
+    .button[disabled] {
+      opacity: .75;
+      cursor: wait;
+    }
+
+    /* ---------- Results ---------- */
+    .results-panel {
+      overflow: hidden;
+      position: sticky;
+      top: 84px;
+    }
+
+    .result-head {
+      padding: 22px 24px 18px;
+      background: linear-gradient(135deg, #1f2f78 0%, #3656b3 100%);
+      border-bottom: none;
+    }
+
+    .result-head h2 {
+      color: #fff;
+      font-size: 17px;
+    }
+
+    .result-head p {
+      margin: 4px 0 0;
+      color: rgba(255,255,255,.65);
+      font-size: 12.5px;
+    }
+
+    .empty {
+      display: grid;
+      min-height: 480px;
+      place-content: center;
+      text-align: center;
+      padding: 30px;
+      color: var(--muted);
+    }
+
+    .empty-illustration {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 16px;
+      display: grid;
+      place-items: center;
+      border-radius: 24px;
+      background: var(--forest-soft);
+      color: var(--forest);
+    }
+
+    .empty-illustration i { width: 36px; height: 36px; }
+
+    .empty strong {
+      display: block;
+      color: var(--ink-soft);
+      font: 700 15px "Space Grotesk", sans-serif;
+    }
+
+    .empty span {
+      display: inline-block;
+      margin-top: 5px;
+      font-size: 13px;
+    }
+
+    .result-content {
+      display: none;
+      padding: 20px;
+    }
+
+    .result-content.visible {
+      display: block;
+      animation: rise .45s ease;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* --- Big outcome cards --- */
+    .gauge-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .outcome {
+      border-radius: var(--radius-md);
+      padding: 18px 16px 16px;
+      background: #fff;
+      border: 1.5px solid var(--line);
+      transition: border-color .25s, box-shadow .25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .outcome::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: .06;
+      pointer-events: none;
+    }
+
+    .outcome.ok { border-color: #a8d8bd; }
+    .outcome.ok::before { background: linear-gradient(135deg, #3656b3, #1f2f78); }
+    .outcome.risk { border-color: #f2c8c4; }
+    .outcome.risk::before { background: linear-gradient(135deg, #b83b38, #e05c59); }
+    .outcome.caution { border-color: #ecd7ae; }
+    .outcome.caution::before { background: linear-gradient(135deg, #b26a00, #e08c00); }
+
+    .outcome-name {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-bottom: 12px;
+      color: var(--muted);
+    }
+
+    .outcome-name i { width: 14px; height: 14px; }
+    .outcome.ok .outcome-name { color: var(--forest); }
+    .outcome.risk .outcome-name { color: var(--red); }
+    .outcome.caution .outcome-name { color: var(--amber); }
+
+    /* circular gauge */
+    .gauge { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+
+    .gauge-svg {
+      position: relative;
+      width: 100px;
+      height: 100px;
+    }
+
+    .gauge-svg svg { transform: rotate(-90deg); }
+    .gauge-track { fill: none; stroke: #e9f0eb; stroke-width: 9; }
+
+    .gauge-fill {
+      fill: none;
+      stroke: var(--forest);
+      stroke-width: 9;
+      stroke-linecap: round;
+      stroke-dasharray: 283;
+      stroke-dashoffset: 283;
+      transition: stroke-dashoffset 1s cubic-bezier(.25,.8,.3,1), stroke .3s;
+      filter: drop-shadow(0 0 6px rgba(14,107,76,.35));
+    }
+
+    .outcome.risk .gauge-fill { stroke: var(--red); filter: drop-shadow(0 0 6px rgba(184,59,56,.35)); }
+    .outcome.caution .gauge-fill { stroke: #e08c00; filter: drop-shadow(0 0 6px rgba(178,106,0,.35)); }
+
+    .gauge-center {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-content: center;
+      text-align: center;
+    }
+
+    .gauge-center strong {
+      display: block;
+      font: 700 24px "Space Grotesk", sans-serif;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    .gauge-center small {
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+
+    .outcome-copy { text-align: center; }
+
+    .outcome-copy strong {
+      display: block;
+      font: 700 14px "Space Grotesk", sans-serif;
+      color: var(--ink);
+      margin-bottom: 3px;
+    }
+
+    .outcome-copy small {
+      display: block;
+      color: var(--muted);
+      font-size: 11.5px;
+      line-height: 1.4;
+    }
+
+    /* --- Progress bar strip --- */
+    .prob-bar-wrap {
+      margin: 14px 0 0;
+      background: #eef2ef;
+      border-radius: 99px;
+      height: 7px;
+      overflow: hidden;
+    }
+
+    .prob-bar {
+      height: 100%;
+      border-radius: 99px;
+      width: 0%;
+      transition: width 1s cubic-bezier(.25,.8,.3,1);
+      background: linear-gradient(90deg, #3656b3, #1f2f78);
+    }
+
+    .outcome.risk .prob-bar { background: linear-gradient(90deg, #b83b38, #e05c59); }
+    .outcome.caution .prob-bar { background: linear-gradient(90deg, #b26a00, #e08c00); }
+
+    /* --- Subject results --- */
+    .subject-results {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .subject-results-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .subject-results-head h3 {
+      margin: 0;
+      font: 700 13px "Space Grotesk", sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--ink);
+    }
+
+    .subject-results-head h3 i { width: 15px; height: 15px; color: var(--forest); }
+
+    .count-badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      background: var(--forest-soft);
+      color: var(--forest-deep);
+    }
+
+    .count-badge.warn { background: var(--red-bg); color: var(--red); }
+
+    .subject-list { display: grid; gap: 7px; }
+
+    .subject-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #f8faf9;
+      border: 1px solid var(--line);
+      animation: rise .4s ease both;
+      transition: background .2s;
+    }
+
+    .subject-item:hover { background: #f0f7f3; }
+
+    .subject-item.risk {
+      background: #fff8f8;
+      border-color: #f2c8c4;
+    }
+
+    .subject-item .subject-dot {
+      flex: 0 0 auto;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #22a06b;
+    }
+
+    .subject-item.risk .subject-dot {
+      background: var(--red);
+      box-shadow: 0 0 0 3px rgba(184,59,56,.15);
+    }
+
+    .subject-item .subject-name {
+      flex: 1;
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .subject-item .subject-meta {
+      color: var(--muted);
+      font-size: 11.5px;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .subject-item .subject-risk {
+      font-size: 11.5px;
+      font-weight: 700;
+      white-space: nowrap;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .subject-item.risk .subject-risk { color: var(--red); background: var(--red-bg); }
+    .subject-item.ok .subject-risk { color: var(--forest); background: var(--forest-soft); }
+
+    /* --- Insights --- */
+    .insights {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .insights-head {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 8px;
+      color: var(--ink);
+      font: 700 13px "Space Grotesk", sans-serif;
+    }
+
+    .insights-head i { width: 15px; height: 15px; color: var(--forest); }
+
+    .insight {
+      display: flex;
+      gap: 10px;
+      padding: 10px 12px;
+      margin-bottom: 6px;
+      border-radius: 10px;
+      background: #f8faf9;
+      border: 1px solid var(--line);
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.45;
+      animation: rise .4s ease both;
+    }
+
+    .insight:last-child { margin-bottom: 0; }
+
+    .insight i {
+      flex: 0 0 auto;
+      width: 16px; height: 16px;
+      margin-top: 2px;
+      color: var(--teal);
+    }
+
+    .api-note {
+      display: none;
+      margin: 14px 20px 0;
+      padding: 10px 13px;
+      border: 1px solid #f0d9ae;
+      border-radius: 10px;
+      color: #77510c;
+      background: var(--amber-bg);
+      font-size: 12.5px;
+    }
+
+    .api-note.visible { display: block; }
+
+    footer {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto 0;
+      padding-bottom: 30px;
+      color: var(--muted);
+      font-size: 12.5px;
+    }
+
+    @media (max-width: 920px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .results-panel {
+        order: -1;
+      }
+
+      .empty {
+        min-height: 220px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .topbar {
+        padding: 0 20px;
+      }
+
+      .status span {
+        display: none;
+      }
+
+      main {
+        width: calc(100% - 28px);
+        padding-top: 34px;
+      }
+
+      .intro {
+        display: block;
+        margin-bottom: 24px;
+      }
+
+      .chip {
+        margin-top: 16px;
+      }
+
+      .form-panel {
+        padding: 22px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-section.full {
+        grid-column: auto;
+      }
+
+      .gauge-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .actions {
+        justify-content: stretch;
+      }
+
+      .button {
+        flex: 1;
+        padding: 0 14px;
+      }
+
+      footer {
+        width: calc(100% - 28px);
+      }
+    }
+    /* College premium theme: equal visual weight for navy and white. */
+    :root {
+      --bg: #edf2fb;
+      --panel: #ffffff;
+      --line: #d9e1f2;
+      --line-strong: #bdc9e5;
+      --ink: #15245d;
+      --ink-soft: #44557d;
+      --muted: #68799d;
+      --forest: #1f347e;
+      --forest-deep: #14255f;
+      --forest-soft: #edf2ff;
+      --mint: #dfe8ff;
+      --teal: #3f62be;
+      --amber: #b78516;
+      --amber-bg: #fff4d8;
+      --radius-lg: 12px;
+      --radius-md: 10px;
+      --radius-sm: 8px;
+      --shadow-panel: 0 12px 30px -22px rgba(17, 40, 100, .34), 0 1px 2px rgba(17, 40, 100, .08);
+      --shadow-pop: 0 22px 48px -30px rgba(17, 40, 100, .42);
+      --ring: 0 0 0 4px rgba(31, 52, 126, .14);
+    }
+
+    body { background: var(--bg); background-image: none; }
+    .login-screen { grid-template-columns: 1fr 1fr; background: #fff; }
+    .login-identity { background: #1f347e; border-right: 7px solid #d2a438; }
+    .login-panel { background: #fff; }
+    .login-form { width: min(100%, 430px); }
+    .login-form h2 { color: #15245d; }
+    .login-submit { background: #1f347e; box-shadow: 0 10px 20px -14px rgba(31, 52, 126, .7); }
+    .login-submit:hover { background: #14255f; }
+
+    .topbar { height: 76px; background: #1f347e; border-bottom: 3px solid #d2a438; }
+    .brand { color: #fff; font-size: 19px; }
+    .brand-logo { border-color: rgba(255, 255, 255, .82); }
+    .status { border-color: rgba(255, 255, 255, .23); background: rgba(255, 255, 255, .1); color: #fff; }
+    .status-dot { background: #e4b33d; box-shadow: 0 0 0 3px rgba(228, 179, 61, .22); }
+    .icon-button { border-color: rgba(255, 255, 255, .23); background: rgba(255, 255, 255, .1); color: #fff; }
+    .icon-button:hover { border-color: #e4b33d; color: #e4b33d; }
+
+    main { width: min(1520px, calc(100% - 56px)); padding: 38px 0 76px; }
+    .intro { align-items: center; min-height: 218px; margin-bottom: 28px; padding: 38px 42px; border: 1px solid #2e499c; border-radius: 12px; background: #1f347e; box-shadow: var(--shadow-pop); }
+    .intro .eyebrow { color: #edc14a; }
+    .intro .eyebrow::before { background: #edc14a; }
+    .intro h1 { color: #fff; letter-spacing: 0; }
+    .intro p { color: #e3e9fa; }
+    .chip { border-color: rgba(255, 255, 255, .34); background: #fff; color: #1f347e; box-shadow: none; }
+    .chip i { color: #b78516; }
+
+    .workspace { grid-template-columns: minmax(0, 1.32fr) minmax(370px, .98fr); gap: 28px; }
+    .panel { border-color: #d9e1f2; border-radius: 12px; }
+    .form-panel { border-top: 4px solid #1f347e; }
+    .results-panel { border-top: 4px solid #d2a438; background: #fbfcff; }
+    .company-finder { border-top: 4px solid #1f347e; background: #fff; }
+    .section-label, .panel-head h2, .result-head h2, .company-finder-head h2 { color: #15245d; }
+    .button.primary { background: #1f347e; box-shadow: 0 8px 18px -12px rgba(31, 52, 126, .72); }
+    .button.primary:hover { background: #14255f; }
+    .company-item { border-color: #dce4f5; background: #fff; }
+    .company-item.applied { border-color: #1f347e; box-shadow: inset 3px 0 #d2a438; }
+    .company-meta .match { background: #edf2ff; color: #1f347e; }
+    footer { border-top-color: #d9e1f2; background: #fff; color: #526384; }
+
+    /* Direct entry replaces the earlier slider controls. */
+    .range-row { display: block; }
+    .metric-input { width: 100%; height: 44px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 8px; background: #fff; color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; outline: none; }
+    .metric-input:focus { border-color: var(--forest); box-shadow: var(--ring); }
+    .metric-input + output { display: none; }
+    .certificate-entry { display: flex; gap: 8px; }
+    .certificate-entry .profile-input { min-width: 0; }
+    .attach-button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 42px; padding: 0 12px; border: 1px solid var(--forest); border-radius: 8px; background: var(--forest-soft); color: var(--forest); font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    .attach-button:hover { background: var(--forest); color: #fff; }
+    .attach-button i { width: 16px; height: 16px; }
+    .certificate-files { display: grid; gap: 6px; margin-top: 9px; }
+    .certificate-file { display: flex; align-items: center; gap: 7px; min-width: 0; padding: 7px 8px; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--ink-soft); font-size: 12px; }
+    .certificate-file i { flex: 0 0 auto; width: 15px; color: var(--forest); }
+    .certificate-file a { min-width: 0; overflow: hidden; color: var(--forest); font-weight: 700; text-decoration: none; text-overflow: ellipsis; white-space: nowrap; }
+    .certificate-file button { display: grid; place-items: center; flex: 0 0 auto; width: 22px; height: 22px; margin-left: auto; padding: 0; border: 0; border-radius: 4px; background: transparent; color: var(--muted); }
+    .certificate-file button:hover { background: var(--red-bg); color: var(--red); }
+    .company-item { min-height: 210px; }
+    .company-role { min-height: 39px; }
+    .company-requirements { display: grid; gap: 5px; margin-top: 12px; padding-top: 11px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 12px; }
+    .company-requirements span { overflow-wrap: anywhere; }
+    .company-requirements strong { color: var(--ink); }
+
+    @media (min-width: 1600px) {
+      .topbar { padding-inline: max(48px, calc((100% - 1520px) / 2)); }
+      main { width: min(1680px, calc(100% - 96px)); }
+      .workspace { grid-template-columns: minmax(0, 1.44fr) minmax(420px, .9fr); }
+      .company-list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .intro { min-height: 244px; padding: 46px 54px; }
+    }
+
+    @media (max-width: 760px) {
+      .login-screen { grid-template-columns: 1fr; }
+      .login-identity { border-right: 0; border-bottom: 6px solid #d2a438; }
+      main { width: min(100% - 28px, 1520px); padding-top: 20px; }
+      .intro { min-height: auto; padding: 30px 24px; }
+      .topbar { height: 68px; }
+      .status { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="login-screen" aria-labelledby="login-title">
+    <div class="login-identity">
+      <div class="college-brand">
+        <img src="/college-logo.jpg" alt="Sahrdaya College of Engineering and Technology logo">
+        <span>Sahrdaya College<small>Engineering & Technology</small></span>
+      </div>
+      <div class="login-message">
+        <p>Student success portal</p>
+        <h1>We make the character, rest follows.</h1>
+        <span>Review your placement readiness and identify areas to strengthen.</span>
+      </div>
+      <div class="login-footer">Sahrdaya College of Engineering &amp; Technology</div>
+    </div>
+    <div class="login-panel">
+      <div class="login-mode" role="group" aria-label="Portal access type">
+        <button class="active" type="button" data-login-mode="student"><i data-lucide="graduation-cap"></i>Student</button>
+        <button type="button" data-login-mode="admin"><i data-lucide="shield-check"></i>Placement cell</button>
+      </div>
+      <form class="login-form" id="login-form">
+        <div class="login-college">
+          <img src="/college-logo.jpg" alt="">
+          <span>Student Portal</span>
+        </div>
+        <h2 id="login-title">Welcome back</h2>
+        <p>Sign in to view your assessment workspace.</p>
+        <div class="login-field"><label for="student-name">Student name</label><input id="student-name" autocomplete="name" required></div>
+        <div class="login-field"><label for="student-id">Register number</label><input id="student-id" autocomplete="username" required></div>
+        <div class="login-field"><label for="student-password">Password</label><input id="student-password" type="password" autocomplete="current-password" required></div>
+        <button class="login-submit" type="submit"><i data-lucide="log-in"></i>Sign in</button>
+        <p class="login-error" id="login-error" aria-live="polite"></p>
+      </form>
+      <form class="login-form" id="admin-login-form">
+        <div class="login-college">
+          <img src="/college-logo.jpg" alt="">
+          <span>Placement Cell</span>
+        </div>
+        <h2>Admin access</h2>
+        <p>Sign in to search the student skill directory.</p>
+        <div class="login-field"><label for="admin-username">Username</label><input id="admin-username" autocomplete="username" required></div>
+        <div class="login-field"><label for="admin-password">Password</label><input id="admin-password" type="password" autocomplete="current-password" required></div>
+        <button class="login-submit" type="submit"><i data-lucide="shield-check"></i>Open placement cell</button>
+        <p class="login-error" id="admin-login-error" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+  <div class="shell app-shell">
+    <header class="topbar">
+      <a class="brand" href="/">
+        <img class="brand-logo" src="/college-logo.jpg" alt="Sahrdaya College logo">
+        Sahrdaya Placement Portal
+      </a>
+      <div class="topbar-actions"><div class="status"><span class="status-dot"></span><span id="session-name">Predictor ready</span></div><button class="icon-button" id="logout" type="button" title="Sign out" aria-label="Sign out"><i data-lucide="log-out"></i></button></div>
+    </header>
+
+    <section class="admin-dashboard" aria-labelledby="admin-title">
+      <div class="admin-hero">
+        <div><h1 id="admin-title">Placement cell directory</h1><p>Find students whose current skills and eligibility match your drive criteria.</p></div>
+        <span class="admin-count" id="admin-count">0 students</span>
+      </div>
+      <div class="admin-filters">
+        <input id="admin-skill-search" type="search" placeholder="Search skills, certificates, or applied company">
+        <select id="admin-skill-type"><option value="all">All profile details</option><option value="software">Software skills</option><option value="hardware">Hardware skills</option><option value="certificates">Certificates</option></select>
+        <input id="admin-min-cgpa" type="number" min="0" max="10" step="0.1" placeholder="Minimum CGPA">
+      </div>
+      <div class="student-directory" id="student-directory"></div>
+    </section>
+
+    <main class="student-main">
+      <section class="intro">
+        <div>
+          <p class="eyebrow">Student readiness assessment</p>
+          <h1>Placement and backlog outlook</h1>
+          <p>Enter your current academic profile to estimate placement readiness, identify backlog risk, and focus your
+            next steps toward the career you want.</p>
+        </div>
+        <div class="chip"><i data-lucide="gauge"></i>13 profile signals</div>
+      </section>
+
+      <div class="workspace">
+        <!-- ======================= FORM ======================= -->
+        <form class="panel form-panel" id="prediction-form">
+          <div class="panel-head">
+            <h2>Student profile</h2>
+            <span class="step">Update the values below</span>
+          </div>
+
+          <div class="form-grid">
+            <section class="form-section">
+              <div class="section-label"><span class="icon-box"><i data-lucide="book-open"></i></span>Academic record
+              </div>
+
+              <div class="field">
+                <div class="field-label-row"><label for="department">Department</label></div>
+                <select id="department">
+                  <option value="CSE">Computer Science</option>
+                  <option value="ECE">Electronics & Communication</option>
+                  <option value="EEE">Electrical & Electronics</option>
+                  <option value="IT">Information Technology</option>
+                  <option value="ME">Mechanical</option>
+                  <option value="CE">Civil</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <div class="field-label-row"><label for="semester">Current semester</label></div>
+                <select id="semester">
+                  <option value="3">Semester 3</option>
+                  <option value="4">Semester 4</option>
+                  <option value="5" selected>Semester 5</option>
+                  <option value="6">Semester 6</option>
+                  <option value="7">Semester 7</option>
+                  <option value="8">Semester 8</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <div class="field-label-row"><label for="cgpa">CGPA</label></div>
+                <div class="range-row"><input id="cgpa" type="range" min="5" max="10" step="0.1" value="7.2"><output
+                    for="cgpa">7.2</output></div>
+              </div>
+
+              <div class="field">
+                <div class="field-label-row"><label for="attendance">Attendance</label></div>
+                <div class="range-row"><input id="attendance" type="range" min="50" max="100" value="80"><output
+                    for="attendance">80%</output></div>
+              </div>
+
+              <div class="field">
+                <div class="field-label-row"><label for="internal">Internal marks</label></div>
+                <div class="range-row"><input id="internal" type="range" min="30" max="100" value="65"><output
+                    for="internal">65</output></div>
+              </div>
+
+              <div class="field">
+                <div class="field-label-row"><label for="study">Study hours per day</label></div>
+                <div class="range-row"><input id="study" type="range" min="1" max="10" value="4"><output for="study">4
+                    h</output></div>
+              </div>
+            </section>
+
+            <section class="form-section">
+              <div class="section-label"><span class="icon-box"><i data-lucide="code-2"></i></span>Career readiness
+              </div>
+
+              <div class="field">
+                <div class="field-label-row"><label for="communication">Communication skill</label></div>
+                <div class="range-row"><input id="communication" type="range" min="1" max="10" value="6"><output
+                    for="communication">6 / 10</output></div>
+              </div>
+
+              <div class="field">
+                <div class="field-label-row"><label for="technical">Technical skill</label></div>
+                <div class="range-row"><input id="technical" type="range" min="1" max="10" value="6"><output
+                    for="technical">6 / 10</output></div>
+              </div>
+
+              <div class="field">
+                <div class="field-label-row"><label for="coding">Coding skill</label></div>
+                <div class="range-row"><input id="coding" type="range" min="1" max="10" value="6"><output for="coding">6
+                    / 10</output></div>
+              </div>
+
+              <div class="field">
+                <div class="field-label-row"><label for="aptitude">Aptitude score</label></div>
+                <div class="range-row"><input id="aptitude" type="range" min="30" max="100" value="65"><output
+                    for="aptitude">65</output></div>
+              </div>
+
+              <div class="field">
+                <div class="field-label-row"><label for="projects">Completed projects</label></div>
+                <div class="range-row"><input id="projects" type="range" min="0" max="5" value="1"><output
+                    for="projects">1</output></div>
+              </div>
+
+              <div class="field">
+                <div class="field-label-row"><label for="certifications">Certifications</label></div>
+                <div class="range-row"><input id="certifications" type="range" min="0" max="6" value="1"><output
+                    for="certifications">1</output></div>
+              </div>
+            </section>
+
+            <section class="form-section full">
+              <div class="section-label"><span class="icon-box"><i data-lucide="badge-check"></i></span>Skills and credentials</div>
+              <div class="form-grid">
+                <div class="field">
+                  <div class="field-label-row"><label for="software-skill-input">Software skills</label></div>
+                  <input class="profile-input" id="software-skill-input" placeholder="e.g. Python, React, SQL" autocomplete="off">
+                  <p class="profile-help">Press Enter or use a comma to add each skill.</p>
+                  <div class="skill-tags" id="software-skill-tags"></div>
+                </div>
+                <div class="field">
+                  <div class="field-label-row"><label for="hardware-skill-input">Hardware skills</label></div>
+                  <input class="profile-input" id="hardware-skill-input" placeholder="e.g. Arduino, VLSI, IoT" autocomplete="off">
+                  <p class="profile-help">Press Enter or use a comma to add each skill.</p>
+                  <div class="skill-tags" id="hardware-skill-tags"></div>
+                </div>
+                <div class="field">
+                  <div class="field-label-row"><label for="certificate-input">Certificates</label></div>
+                  <div class="certificate-entry"><input class="profile-input" id="certificate-input" placeholder="e.g. AWS Cloud Practitioner" autocomplete="off"><label class="attach-button" for="certificate-file"><i data-lucide="paperclip"></i>Attach</label><input id="certificate-file" type="file" accept=".pdf,.png,.jpg,.jpeg" hidden></div>
+                  <p class="profile-help">Add certificates one at a time.</p>
+                  <div class="skill-tags" id="certificate-tags"></div>
+                  <div class="certificate-files" id="certificate-files"></div>
+                  <p class="profile-help" id="certificate-upload-status" aria-live="polite"></p>
+                </div>
+                <div class="field">
+                  <div class="field-label-row"><label for="applied-company">Applied company</label></div>
+                  <input class="profile-input" id="applied-company" placeholder="Search or enter a company name" autocomplete="organization">
+                  <p class="profile-help">Your company is marked in the finder below.</p>
+                </div>
+              </div>
+            </section>
+
+            <section class="form-section full">
+              <div class="section-label"><span class="icon-box"><i
+                    data-lucide="briefcase-business"></i></span>Experience</div>
+              <label>Internship experience</label>
+              <div style="margin-top:10px;" class="binary" role="group" aria-label="Internship experience">
+                <button type="button" class="active" data-internship="No"><i data-lucide="circle-dashed"></i>No
+                  internship yet</button>
+                <button type="button" data-internship="Yes"><i data-lucide="badge-check"></i>Completed
+                  internship</button>
+              </div>
+            </section>
+
+            <section class="form-section full">
+              <div class="section-label"><span class="icon-box"><i data-lucide="book-marked"></i></span>Subject-wise
+                performance
+              </div>
+              <div class="subject-grid">
+                <div class="subject-card">
+                  <h3>AI</h3>
+                  <div class="field">
+                    <div class="field-label-row"><label for="ai-internal">Internal marks</label></div>
+                    <div class="range-row"><input id="ai-internal" type="range" min="16" max="40" value="28"><output
+                        for="ai-internal">28</output></div>
+                  </div>
+                  <div class="field">
+                    <div class="field-label-row"><label for="ai-hours">Study hours / week</label></div>
+                    <div class="range-row"><input id="ai-hours" type="range" min="1" max="15" value="8"><output
+                        for="ai-hours">8 h</output></div>
+                  </div>
+                </div>
+                <div class="subject-card">
+                  <h3>Machine Learning</h3>
+                  <div class="field">
+                    <div class="field-label-row"><label for="ml-internal">Internal marks</label></div>
+                    <div class="range-row"><input id="ml-internal" type="range" min="16" max="40" value="28"><output
+                        for="ml-internal">28</output></div>
+                  </div>
+                  <div class="field">
+                    <div class="field-label-row"><label for="ml-hours">Study hours / week</label></div>
+                    <div class="range-row"><input id="ml-hours" type="range" min="1" max="15" value="8"><output
+                        for="ml-hours">8 h</output></div>
+                  </div>
+                </div>
+                <div class="subject-card">
+                  <h3>Computer Networks</h3>
+                  <div class="field">
+                    <div class="field-label-row"><label for="cn-internal">Internal marks</label></div>
+                    <div class="range-row"><input id="cn-internal" type="range" min="16" max="40" value="28"><output
+                        for="cn-internal">28</output></div>
+                  </div>
+                  <div class="field">
+                    <div class="field-label-row"><label for="cn-hours">Study hours / week</label></div>
+                    <div class="range-row"><input id="cn-hours" type="range" min="1" max="15" value="8"><output
+                        for="cn-hours">8 h</output></div>
+                  </div>
+                </div>
+                <div class="subject-card">
+                  <h3>Compiler Design</h3>
+                  <div class="field">
+                    <div class="field-label-row"><label for="cd-internal">Internal marks</label></div>
+                    <div class="range-row"><input id="cd-internal" type="range" min="16" max="40" value="28"><output
+                        for="cd-internal">28</output></div>
+                  </div>
+                  <div class="field">
+                    <div class="field-label-row"><label for="cd-hours">Study hours / week</label></div>
+                    <div class="range-row"><input id="cd-hours" type="range" min="1" max="15" value="8"><output
+                        for="cd-hours">8 h</output></div>
+                  </div>
+                </div>
+                <div class="subject-card">
+                  <h3>Web Technology</h3>
+                  <div class="field">
+                    <div class="field-label-row"><label for="web-internal">Internal marks</label></div>
+                    <div class="range-row"><input id="web-internal" type="range" min="16" max="40" value="28"><output
+                        for="web-internal">28</output></div>
+                  </div>
+                  <div class="field">
+                    <div class="field-label-row"><label for="web-hours">Study hours / week</label></div>
+                    <div class="range-row"><input id="web-hours" type="range" min="1" max="15" value="8"><output
+                        for="web-hours">8 h</output></div>
+                  </div>
+                </div>
+                <div class="subject-card">
+                  <h3>Mini Project</h3>
+                  <div class="field">
+                    <div class="field-label-row"><label for="mp-internal">Internal marks</label></div>
+                    <div class="range-row"><input id="mp-internal" type="range" min="16" max="40" value="28"><output
+                        for="mp-internal">28</output></div>
+                  </div>
+                  <div class="field">
+                    <div class="field-label-row"><label for="mp-hours">Study hours / week</label></div>
+                    <div class="range-row"><input id="mp-hours" type="range" min="1" max="15" value="8"><output
+                        for="mp-hours">8 h</output></div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div class="actions">
+            <button class="button secondary" type="reset"><i data-lucide="rotate-ccw"></i>Reset</button>
+            <button class="button primary" id="predict" type="submit"><i data-lucide="sparkles"></i>Run
+              assessment</button>
+          </div>
+        </form>
+
+        <!-- ======================= RESULTS ======================= -->
+        <aside class="panel results-panel" aria-live="polite">
+          <div class="result-head">
+            <h2>Assessment results</h2>
+            <p>Results are based on your current profile.</p>
+          </div>
+          <div class="api-note" id="api-note"></div>
+
+          <div class="empty" id="empty-state">
+            <div class="empty-illustration"><i data-lucide="chart-no-axes-gantt"></i></div>
+            <strong>Your profile summary will appear here</strong>
+            <span>Run an assessment after completing the form.</span>
+          </div>
+
+          <div class="result-content" id="result-content">
+            <div class="gauge-grid">
+              <article class="outcome ok" id="backlog-outcome">
+                <div class="outcome-name"><i data-lucide="circle-alert"></i>Backlog risk</div>
+                <div class="gauge">
+                  <div class="gauge-svg">
+                    <svg width="100" height="100" viewBox="0 0 100 100">
+                      <circle class="gauge-track" cx="50" cy="50" r="45"></circle>
+                      <circle class="gauge-fill" id="backlog-meter" cx="50" cy="50" r="45"></circle>
+                    </svg>
+                    <div class="gauge-center"><strong id="backlog-probability">0%</strong><small>risk</small></div>
+                  </div>
+                  <div class="outcome-copy">
+                    <strong id="backlog-label">Low risk</strong>
+                    <small id="backlog-copy">Your record looks steady.</small>
+                  </div>
+                </div>
+                <div class="prob-bar-wrap"><div class="prob-bar" id="backlog-bar"></div></div>
+              </article>
+
+              <article class="outcome ok" id="placement-outcome">
+                <div class="outcome-name"><i data-lucide="target"></i>Placement</div>
+                <div class="gauge">
+                  <div class="gauge-svg">
+                    <svg width="100" height="100" viewBox="0 0 100 100">
+                      <circle class="gauge-track" cx="50" cy="50" r="45"></circle>
+                      <circle class="gauge-fill" id="placement-meter" cx="50" cy="50" r="45"></circle>
+                    </svg>
+                    <div class="gauge-center"><strong id="placement-probability">0%</strong><small>chance</small></div>
+                  </div>
+                  <div class="outcome-copy">
+                    <strong id="placement-label">Promising</strong>
+                    <small id="placement-copy">Continue building your profile.</small>
+                  </div>
+                </div>
+                <div class="prob-bar-wrap"><div class="prob-bar" id="placement-bar"></div></div>
+              </article>
+            </div>
+
+            <section class="subject-results">
+              <div class="subject-results-head">
+                <h3><i data-lucide="book-marked"></i>Subject backlog outlook</h3>
+                <span class="count-badge" id="subject-count-badge">0 at risk</span>
+              </div>
+              <div class="subject-list" id="subject-list"></div>
+            </section>
+
+            <section class="insights">
+              <div class="insights-head"><i data-lucide="lightbulb"></i>Recommended focus</div>
+              <div id="tips"></div>
+            </section>
+          </div>
+        </aside>
+      </div>
+
+      <section class="panel company-finder" aria-labelledby="company-finder-title">
+        <div class="company-finder-head">
+          <div>
+            <h2 id="company-finder-title"><i data-lucide="building-2"></i>Company finder</h2>
+            <p>Search past placement opportunities and see the roles that align with your profile.</p>
+          </div>
+          <label class="company-search"><i data-lucide="search"></i><input id="company-search" type="search" placeholder="Search company or role"></label>
+        </div>
+        <div class="company-list" id="company-list"></div>
+      </section>
+    </main>
+
+    <footer class="student-footer">Placement Compass uses your academic and professional signals for an indicative assessment.</footer>
+  </div>
+
+  <script>
+    const loginForm = document.querySelector('#login-form');
+    const loginError = document.querySelector('#login-error');
+    const adminLoginForm = document.querySelector('#admin-login-form');
+    const adminLoginError = document.querySelector('#admin-login-error');
+    const loginPanel = document.querySelector('.login-panel');
+    const sessionName = document.querySelector('#session-name');
+    const savedStudent = sessionStorage.getItem('placement-portal-student');
+    const savedAdmin = sessionStorage.getItem('placement-portal-admin');
+
+    function enterPortal(name, admin) {
+      document.body.classList.add('authenticated');
+      document.body.classList.toggle('admin', Boolean(admin));
+      sessionName.textContent = name;
+    }
+
+    // --- Login mode switch (Student / Placement cell) ---
+    document.querySelectorAll('[data-login-mode]').forEach(button =>
+      button.addEventListener('click', () => {
+        const isAdmin = button.dataset.loginMode === 'admin';
+        document.querySelectorAll('[data-login-mode]').forEach(item => item.classList.toggle('active', item === button));
+        loginPanel.classList.toggle('admin-mode', isAdmin);
+        loginError.textContent = '';
+        adminLoginError.textContent = '';
+      })
+    );
+
+    if (savedStudent) enterPortal(savedStudent, false);
+    if (savedAdmin) enterPortal(savedAdmin, true);
+
+    loginForm.addEventListener('submit', event => {
+      event.preventDefault();
+      const name = document.querySelector('#student-name').value.trim();
+      const registerNumber = document.querySelector('#student-id').value.trim();
+      const password = document.querySelector('#student-password').value;
+      if (!name || !registerNumber || !password) {
+        loginError.textContent = 'Enter your name, register number, and password.';
+        return;
+      }
+      sessionStorage.setItem('placement-portal-student', name);
+      sessionStorage.setItem('placement-portal-user', JSON.stringify({ name, registerNumber }));
+      loginError.textContent = '';
+      enterPortal(name, false);
+    });
+
+    adminLoginForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      const username = document.querySelector('#admin-username').value.trim();
+      const password = document.querySelector('#admin-password').value;
+      const button = adminLoginForm.querySelector('.login-submit');
+      if (!username || !password) {
+        adminLoginError.textContent = 'Enter the placement cell username and password.';
+        return;
+      }
+      button.disabled = true;
+      try {
+        const response = await fetch('/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.error || 'Unable to sign in. Is the server running?');
+        sessionStorage.setItem('placement-portal-admin', 'Placement cell');
+        adminLoginError.textContent = '';
+        enterPortal('Placement cell', true);
+        loadAdminDirectory();
+      } catch (error) {
+        adminLoginError.textContent = error.message;
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    document.querySelector('#logout').addEventListener('click', async () => {
+      const wasAdmin = document.body.classList.contains('admin');
+      if (wasAdmin) {
+        try { await fetch('/admin/logout', { method: 'POST' }); } catch (_) { /* offline */ }
+      }
+      sessionStorage.removeItem('placement-portal-student');
+      sessionStorage.removeItem('placement-portal-admin');
+      loginForm.reset();
+      adminLoginForm.reset();
+      document.body.classList.remove('authenticated', 'admin');
+      loginPanel.classList.remove('admin-mode');
+      document.querySelectorAll('[data-login-mode]').forEach((item, index) => item.classList.toggle('active', index === 0));
+      document.querySelector('#student-name').focus();
+    });
+
+    let COMPANIES = [
+      ['Federal Bank', 'Customer Service Associate', '7.35 LPA', 'banking customer service'],
+      ['IBM Software Labs', 'Software Developer', '8 LPA', 'software development cloud java python'],
+      ['SOTI', 'Associate SDET', '7.5 LPA', 'testing automation software'],
+      ['Innovature Labs', 'Associate Software Engineer', '2.65 LPA', 'software development data'],
+      ['Cognizant Technology Solution', 'Programmer Analyst Trainee', '6.75 LPA', 'software programming java python'],
+      ['G10X Technology', 'Internal Trainee', '4 LPA', 'software cloud development'],
+      ['Infosys', 'Systems Engineer', '3.6 LPA', 'software programming cloud'],
+      ['Poornam Infovision', 'Junior Software Engineer Trainee', '3.03 LPA', 'software development testing'],
+      ['UVJ Technologies', 'Associate Software Engineer', '3.15 LPA', 'software data analytics'],
+      ['Caddayn', 'Flutter Developer', '1.2 LPA', 'flutter mobile software development'],
+      ['UST Global', 'Developer I - Software Engineering', '4.25 LPA', 'software engineering java cloud'],
+      ['Interland Technology Services', 'Associate Software Developer', '2.65 LPA', 'software development java'],
+      ['Clockhash Technologies', 'Graduate Software Engineering Trainee', '1.8 LPA', 'software engineering programming'],
+      ['LTIMindtree', 'Graduate Engineer Trainee', '4.05 LPA', 'software engineering cloud'],
+      ['Feathersoft Info Solutions', 'Software Engineer Trainee', '3.25 LPA', 'software engineering programming'],
+      ['NexoMira', 'Software Engineer Trainee', '4.2 LPA', 'software engineering programming'],
+      ['TechMahindra', 'Customer Support Associate', '1.8 LPA', 'support customer service'],
+      ['Erasmith', 'Cloud Engineer', '4.5 LPA', 'cloud aws devops software'],
+      ['Litmus7', 'Associate Engineer Trainee', '4 LPA', 'software engineering cloud'],
+      ['Sutherland', 'Technical Support', '3.75 LPA', 'technical support networking'],
+      ['Triaxia Infotech', 'UI/UX Developer', '1.2 LPA', 'ui ux design web'],
+      ['Gapblue Software Labs', 'Trainee Associate Consultant', '3.1 LPA', 'software consulting data'],
+      ['Axis Bank', 'Customer Relations Officer', '3.5 LPA', 'banking customer service'],
+      ['Webandcrafts', 'SEO Analyst', '1.8 LPA', 'seo web marketing'],
+      ['Jobin and Jismi', 'Quality Assurance', '4 LPA', 'quality assurance testing'],
+      ['Amazon', 'Data Associate', '5 LPA', 'data analytics sql'],
+      ['Tata Consultancy Service', 'Developer I - Software Engineering', '4.5 LPA', 'software engineering java python'],
+      ['Techolas', 'Technology Trainee', '2 LPA', 'software data analytics'],
+      ['Genzoic LLC', 'Software Engineer', '2.5 LPA', 'software engineering programming'],
+      ['Nuerolink Startup', 'Software Engineer', '2.5 LPA', 'startup software engineering'],
+      ['Freelance Engineer', 'Cyber Security Engineer', '3.5 LPA', 'cyber security networking'],
+      ['Zuke Infotech', 'Software Developer', '3 LPA', 'software development programming'],
+      ['Codeless, Thrissur', 'Software Engineer', '2.5 LPA', 'software engineering programming'],
+      ['Tie Kerala', 'Software Engineer', '2.5 LPA', 'software engineering startup'],
+      ['Timex Pvt Ltd', 'Software Engineer', '2 LPA', 'software engineering programming'],
+      ['Travidux Technologies', 'UI/UX Developer', '2 LPA', 'ui ux design web']
+    ].map(([name, role, salary, keywords]) => ({ name, role, salary, keywords }));
+
+    const PROFILE_KEY = 'placement-portal-profile';
+    const profile = JSON.parse(localStorage.getItem(PROFILE_KEY) || '{"software":[],"hardware":[],"certificates":[],"certificateFiles":[],"appliedCompany":""}');
+    ['software', 'hardware', 'certificates'].forEach(key => { if (!Array.isArray(profile[key])) profile[key] = []; });
+    if (!Array.isArray(profile.certificateFiles)) profile.certificateFiles = [];
+    const tagConfig = [
+      ['software', 'software-skill-input', 'software-skill-tags'],
+      ['hardware', 'hardware-skill-input', 'hardware-skill-tags'],
+      ['certificates', 'certificate-input', 'certificate-tags']
+    ];
+
+    function saveProfile() {
+      localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+      syncProfileToServer();
+    }
+
+    // Mirror the student profile to the placement cell directory so admins can find it.
+    let syncTimer;
+    function syncProfileToServer() {
+      let account = {};
+      try { account = JSON.parse(sessionStorage.getItem('placement-portal-user') || '{}'); } catch (_) { }
+      const record = {
+        name: account.name || sessionName.textContent || 'Student',
+        registerNumber: account.registerNumber || '',
+        software: profile.software,
+        hardware: profile.hardware,
+        certificates: profile.certificates,
+        certificateFiles: profile.certificateFiles,
+        appliedCompany: profile.appliedCompany,
+        cgpa: document.querySelector('#cgpa') ? document.querySelector('#cgpa').value : profile.cgpa
+      };
+      profile.cgpa = record.cgpa;
+      localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+      // Keep a browser-local copy as an offline fallback for the admin search.
+      const stored = localStudents().filter(item => item.registerNumber !== record.registerNumber || !record.registerNumber);
+      if (record.registerNumber) { stored.push(record); localStorage.setItem(LOCAL_STUDENTS_KEY, JSON.stringify(stored)); }
+      clearTimeout(syncTimer);
+      syncTimer = setTimeout(() => {
+        fetch('/student-profile', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(record) })
+          .catch(() => { /* directory sync is best-effort */ });
+      }, 400);
+    }
+    function profileTerms() { return [...profile.software, ...profile.hardware, ...profile.certificates].map(item => item.toLowerCase()); }
+    function renderTags() {
+      tagConfig.forEach(([key, , tagId]) => {
+        const container = document.querySelector('#' + tagId);
+        container.replaceChildren(...profile[key].map((skill, index) => {
+          const tag = document.createElement('span');
+          tag.className = 'skill-tag';
+          tag.textContent = skill;
+          const remove = document.createElement('button');
+          remove.type = 'button';
+          remove.title = 'Remove ' + skill;
+          remove.setAttribute('aria-label', 'Remove ' + skill);
+          remove.innerHTML = '<i data-lucide="x"></i>';
+          remove.addEventListener('click', () => { profile[key].splice(index, 1); saveProfile(); renderTags(); renderCompanies(); });
+          tag.append(remove);
+          return tag;
+        }));
+      });
+      lucide.createIcons();
+    }
+    function addSkills(key, input) {
+      input.value.split(',').map(value => value.trim()).filter(Boolean).forEach(value => {
+        if (!profile[key].some(existing => existing.toLowerCase() === value.toLowerCase())) profile[key].push(value);
+      });
+      input.value = ''; saveProfile(); renderTags(); renderCompanies();
+    }
+
+    function renderCertificateFiles() {
+      const list = document.querySelector('#certificate-files');
+      list.replaceChildren(...profile.certificateFiles.map((file, index) => {
+        const row = document.createElement('div');
+        row.className = 'certificate-file';
+        row.innerHTML = '<i data-lucide="file-badge"></i><a target="_blank" rel="noopener"></a><button type="button" title="Remove attachment" aria-label="Remove attachment"><i data-lucide="x"></i></button>';
+        const link = row.querySelector('a');
+        link.href = file.url;
+        link.textContent = file.name;
+        row.querySelector('button').addEventListener('click', () => {
+          profile.certificateFiles.splice(index, 1);
+          saveProfile();
+          renderCertificateFiles();
+        });
+        return row;
+      }));
+      lucide.createIcons();
+    }
+    tagConfig.forEach(([key, inputId]) => {
+      const input = document.querySelector('#' + inputId);
+      input.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ',') { event.preventDefault(); addSkills(key, input); } });
+      input.addEventListener('blur', () => { if (input.value.trim()) addSkills(key, input); });
+    });
+
+    const certificateFileInput = document.querySelector('#certificate-file');
+    const certificateUploadStatus = document.querySelector('#certificate-upload-status');
+    certificateFileInput.addEventListener('change', async () => {
+      const file = certificateFileInput.files[0];
+      if (!file) return;
+      certificateUploadStatus.textContent = 'Attaching certificate...';
+      const formData = new FormData();
+      formData.append('certificate', file);
+      try {
+        const response = await fetch('/upload-certificate', { method: 'POST', body: formData });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Unable to attach certificate.');
+        profile.certificateFiles.push(result);
+        saveProfile();
+        renderCertificateFiles();
+        certificateUploadStatus.textContent = result.name + ' attached.';
+      } catch (error) {
+        certificateUploadStatus.textContent = error.message;
+      } finally {
+        certificateFileInput.value = '';
+      }
+    });
+
+    const appliedCompany = document.querySelector('#applied-company');
+    const companySearch = document.querySelector('#company-search');
+    appliedCompany.value = profile.appliedCompany || '';
+    appliedCompany.addEventListener('input', () => { profile.appliedCompany = appliedCompany.value.trim(); saveProfile(); renderCompanies(); });
+    companySearch.addEventListener('input', renderCompanies);
+
+    function renderCompanies() {
+      const list = document.querySelector('#company-list');
+      const query = companySearch.value.trim().toLowerCase();
+      const applied = (profile.appliedCompany || '').toLowerCase();
+      const terms = profileTerms();
+      const filtered = COMPANIES.map(company => ({
+        ...company,
+        applied: Boolean(applied && company.name.toLowerCase().includes(applied)),
+        matched: terms.some(term => term.length > 1 && (company.keywords + ' ' + company.role).toLowerCase().includes(term))
+      })).filter(company => !query || (company.name + ' ' + company.role + ' ' + company.keywords).toLowerCase().includes(query))
+        .sort((a, b) => Number(b.applied) - Number(a.applied) || Number(b.matched) - Number(a.matched) || a.name.localeCompare(b.name));
+      if (!filtered.length) { list.innerHTML = '<div class="company-empty">No placement opportunities match that search.</div>'; return; }
+      list.replaceChildren(...filtered.map(company => {
+        const card = document.createElement('article');
+        card.className = 'company-item' + (company.applied ? ' applied' : '');
+        card.innerHTML = '<h3></h3><p class="company-role"></p><div class="company-meta"></div><div class="company-requirements"></div>';
+        card.querySelector('h3').textContent = company.name;
+        card.querySelector('.company-role').textContent = company.role + (company.industry ? ' | ' + company.industry : '');
+        const meta = card.querySelector('.company-meta');
+        [
+          company.salary || (company.minimumCgpa !== undefined ? 'Min CGPA ' + company.minimumCgpa : ''),
+          company.location || '',
+          company.applied ? 'Applied' : '',
+          company.matched ? 'Profile match' : ''
+        ].filter(Boolean).forEach((label, index) => {
+          const badge = document.createElement('span'); badge.textContent = label; if (index > 1) badge.className = 'match'; meta.append(badge);
+        });
+        const details = card.querySelector('.company-requirements');
+        [
+          company.skills?.length ? ['Required skills', company.skills.join(', ')] : null,
+          company.internshipRequired ? ['Internship', company.internshipRequired] : null,
+          company.backlogsAllowed ? ['Backlogs', company.backlogsAllowed] : null,
+          company.experience ? ['Experience', company.experience + (company.jobType ? ' | ' + company.jobType : '')] : null
+        ].filter(Boolean).forEach(([label, value]) => {
+          const row = document.createElement('span');
+          row.innerHTML = '<strong></strong> ';
+          row.querySelector('strong').textContent = label + ':';
+          row.append(value);
+          details.append(row);
+        });
+        return card;
+      }));
+    }
+    renderTags();
+    renderCertificateFiles();
+    renderCompanies();
+
+    // ================= Placement cell directory =================
+    const adminSearch = document.querySelector('#admin-skill-search');
+    const adminSkillType = document.querySelector('#admin-skill-type');
+    const adminMinCgpa = document.querySelector('#admin-min-cgpa');
+    const adminCount = document.querySelector('#admin-count');
+    const studentDirectory = document.querySelector('#student-directory');
+    // Local fallback: profiles saved by this browser's students.
+    const LOCAL_STUDENTS_KEY = 'placement-portal-students';
+
+    function localStudents() {
+      try { return JSON.parse(localStorage.getItem(LOCAL_STUDENTS_KEY) || '[]'); }
+      catch (_) { return []; }
+    }
+
+    function setDirectoryMessage(message, count) {
+      studentDirectory.innerHTML = '<div class="directory-empty">' + message + '</div>';
+      if (count !== undefined) adminCount.textContent = count;
+    }
+
+    function matchesStudent(profile, terms, skillType, minimumCgpa) {
+      const scoped = ['software', 'hardware', 'certificates'].includes(skillType)
+        ? (profile[skillType] || [])
+        : [...(profile.software || []), ...(profile.hardware || []), ...(profile.certificates || [])];
+      const searchable = [...scoped, profile.appliedCompany || '', profile.name || '', profile.registerNumber || ''].join(' ').toLowerCase();
+      const cgpa = Number(profile.cgpa);
+      return terms.every(term => searchable.includes(term)) && (!minimumCgpa || (Number.isFinite(cgpa) && cgpa >= minimumCgpa));
+    }
+
+    const DIRECTORY_PAGE_SIZE = 60;
+    let directoryPage = 1;
+
+    function renderStudentDirectory(students) {
+      adminCount.textContent = students.length + (students.length === 1 ? ' student' : ' students');
+      if (!students.length) {
+        setDirectoryMessage('No students match these criteria yet.', '0 students');
+        return;
+      }
+      const pageCount = Math.ceil(students.length / DIRECTORY_PAGE_SIZE);
+      directoryPage = Math.min(Math.max(1, directoryPage), pageCount);
+      const start = (directoryPage - 1) * DIRECTORY_PAGE_SIZE;
+      const visible = students.slice(start, start + DIRECTORY_PAGE_SIZE);
+      studentDirectory.replaceChildren(...visible.map(profile => {
+        const card = document.createElement('article');
+        card.className = 'student-result';
+        card.innerHTML = '<h3></h3><p class="student-dept"></p><div class="student-data"></div>';
+        card.querySelector('h3').textContent = profile.name || 'Unnamed student';
+        card.querySelector('.student-dept').textContent = profile.registerNumber || '';
+        const data = card.querySelector('.student-data');
+        const rows = [
+          profile.cgpa !== undefined && profile.cgpa !== null && profile.cgpa !== '' ? ['CGPA', String(profile.cgpa)] : null,
+          profile.department ? ['Dept', profile.department] : null,
+          profile.software?.length ? ['Software', profile.software.join(', ')] : null,
+          profile.hardware?.length ? ['Hardware', profile.hardware.join(', ')] : null,
+          profile.certificates?.length ? ['Certificates', profile.certificates.join(', ')] : null,
+          profile.appliedCompany ? ['Applied', profile.appliedCompany] : null
+        ].filter(Boolean);
+        rows.forEach(([label, value]) => {
+          const row = document.createElement('span');
+          row.innerHTML = '<strong></strong> ';
+          row.querySelector('strong').textContent = label + ':';
+          row.append(value);
+          data.append(row);
+        });
+        return card;
+      }));
+      if (pageCount > 1) {
+        const nav = document.createElement('div');
+        nav.className = 'directory-empty';
+        nav.style.display = 'flex';
+        nav.style.gap = '12px';
+        nav.style.alignItems = 'center';
+        nav.style.justifyContent = 'center';
+        const info = document.createElement('span');
+        info.textContent = `Showing ${start + 1}-${start + visible.length} of ${students.length} students`;
+        const prev = document.createElement('button');
+        prev.type = 'button';
+        prev.className = 'button secondary';
+        prev.textContent = 'Previous';
+        prev.disabled = directoryPage === 1;
+        prev.addEventListener('click', () => { directoryPage -= 1; renderStudentDirectory(students); document.querySelector('.admin-dashboard').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+        const next = document.createElement('button');
+        next.type = 'button';
+        next.className = 'button secondary';
+        next.textContent = 'Next';
+        next.disabled = directoryPage === pageCount;
+        next.addEventListener('click', () => { directoryPage += 1; renderStudentDirectory(students); document.querySelector('.admin-dashboard').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+        nav.append(info, prev, next);
+        studentDirectory.append(nav);
+      }
+    }
+
+    let directoryRequest = 0;
+    async function loadAdminDirectory() {
+      const requestId = ++directoryRequest;
+      directoryPage = 1;
+      const terms = adminSearch.value.trim().toLowerCase().split(/[\s,]+/).filter(Boolean);
+      const skillType = adminSkillType.value;
+      const minimumCgpa = adminMinCgpa.value ? Number(adminMinCgpa.value) : null;
+      setDirectoryMessage('Searching the student directory...', 'Searching...');
+      let students;
+      try {
+        const params = new URLSearchParams({ skills: terms.join(' '), skillType });
+        if (minimumCgpa) params.set('minimumCgpa', String(minimumCgpa));
+        const response = await fetch('/admin/students?' + params.toString());
+        if (!response.ok) throw new Error('directory unavailable');
+        const result = await response.json();
+        students = result.students || [];
+      } catch (_) {
+        // Offline fallback using students saved in this browser.
+        students = localStudents().filter(profile => matchesStudent(profile, terms, skillType, minimumCgpa));
+      }
+      // Ignore responses that arrived after a newer search was started.
+      if (requestId !== directoryRequest) return;
+      renderStudentDirectory(students);
+    }
+
+    let directoryDebounce;
+    function scheduleDirectoryLoad() {
+      clearTimeout(directoryDebounce);
+      directoryDebounce = setTimeout(loadAdminDirectory, 250);
+    }
+    [adminSearch, adminMinCgpa].forEach(field => field.addEventListener('input', scheduleDirectoryLoad));
+    adminSkillType.addEventListener('change', loadAdminDirectory);
+
+    fetch('/companies')
+      .then(response => response.ok ? response.json() : Promise.reject(new Error('Company data unavailable')))
+      .then(jobs => {
+        COMPANIES = jobs.map(job => ({
+          ...job,
+          keywords: [job.industry, job.role, job.location, ...(job.skills || [])].join(' ').toLowerCase()
+        }));
+        renderCompanies();
+      })
+      .catch(() => { /* Keep the placement-workbook company list available offline. */ });
+
+    const CIRCUMFERENCE = 2 * Math.PI * 45; // 282.74
+    const suffixes = { cgpa: '', attendance: '%', internal: '', study: ' h', communication: ' / 10', technical: ' / 10', coding: ' / 10', aptitude: '', projects: '', certifications: '' };
+    const form = document.querySelector('#prediction-form');
+    let internship = 'No';
+
+    function paintRange(input) {
+      const min = Number(input.min), max = Number(input.max), value = Number(input.value);
+      const fill = ((value - min) / (max - min)) * 100;
+      input.style.setProperty('--fill', fill + '%');
+    }
+    function renderOutput(input) {
+      const suffix = input.id.endsWith('-hours') ? ' h' : (input.id.endsWith('-internal') ? '' : suffixes[input.id]);
+      input.nextElementSibling.value = input.id === 'cgpa' ? Number(input.value).toFixed(1) : input.value + (suffix || '');
+      paintRange(input);
+    }
+    const metricInputs = document.querySelectorAll('input[type="range"]');
+    metricInputs.forEach(input => {
+      input.type = 'number';
+      input.classList.add('metric-input');
+      renderOutput(input);
+      input.addEventListener('input', () => renderOutput(input));
+    });
+    document.querySelector('#cgpa').addEventListener('change', saveProfile);
+
+    document.querySelectorAll('[data-internship]').forEach(button =>
+      button.addEventListener('click', () => {
+        internship = button.dataset.internship;
+        document.querySelectorAll('[data-internship]').forEach(item => item.classList.toggle('active', item === button));
+      })
+    );
+
+    form.addEventListener('reset', () => setTimeout(() => {
+      internship = 'No';
+      document.querySelectorAll('[data-internship]').forEach((item, index) => item.classList.toggle('active', index === 0));
+      metricInputs.forEach(renderOutput);
+    }, 0));
+
+    const DEPT_MAP = { CE: 0, CSE: 1, ECE: 2, EEE: 3, IT: 4, ME: 5 };
+
+    function localPredict(payload) {
+      const attendance = +payload.attendance, study = +payload.study, internal = +payload.internal;
+      const cgpa = +payload.cgpa, communication = +payload.communication, technical = +payload.technical;
+      const coding = +payload.coding, aptitude = +payload.aptitude, projects = +payload.projects;
+      const certifications = +payload.certifications, hasInternship = payload.internship === 'Yes';
+
+      const backlogScore = (75 - attendance) * 0.9 + (6.5 - cgpa) * 13 + (4 - study) * 4 + (55 - internal) * 0.35;
+      const placementScore = (cgpa - 5) * 10 + communication * 3 + technical * 4 + coding * 4 + aptitude * 0.18 + projects * 5 + certifications * 3 + (hasInternship ? 10 : 0);
+      const backlogProb = Math.max(3, Math.min(97, 20 + backlogScore));
+      const placementProb = Math.max(3, Math.min(97, placementScore - 25));
+      const backlog = backlogProb >= 50 ? 1 : 0;
+      const placement = placementProb >= 55 ? 1 : 0;
+
+      const SUBJECT_NAMES = { ai: 'AI', ml: 'Machine Learning', cn: 'Computer Networks', cd: 'Compiler Design', web: 'Web Technology', mp: 'Mini Project' };
+      const subjects = SUBJECT_KEYS.map(key => {
+        const sub = (payload.subjects || {})[key] || {};
+        const sint = Math.max(16, Math.min(40, +(sub.internal !== undefined ? sub.internal : 28)));
+        const shours = +(sub.hours !== undefined ? sub.hours : 8);
+        // at risk if internal < 24/40 (60%) OR overall backlog risk and borderline
+        const atRisk = sint < 24 || (backlog === 1 && sint < 28);
+        const prob = sint < 20 ? 90 : sint < 24 ? 75 : sint < 28 ? 55 : 15;
+        return { key, name: SUBJECT_NAMES[key], internal: sint, hours: shours, at_risk: atRisk, probability: prob };
+      });
+
+      const tips = [];
+      if (backlog) {
+        if (attendance < 75) tips.push({ type: 'danger', text: 'Boost attendance above 75% to reduce backlog exposure.' });
+        if (study < 4) tips.push({ type: 'warning', text: 'Increase daily study time to at least 4 to 5 hours.' });
+        if (cgpa < 6.5) tips.push({ type: 'warning', text: 'Focus on core subjects to move your CGPA above 6.5.' });
+      }
+      if (!placement) {
+        if (communication < 6) tips.push({ type: 'info', text: 'Build communication skills through public speaking practice and feedback.' });
+        if (technical < 6 || coding < 6) tips.push({ type: 'info', text: 'Create a consistent technical and coding practice routine.' });
+        if (projects === 0) tips.push({ type: 'info', text: 'Build one or two practical projects to strengthen your resume.' });
+        if (!hasInternship) tips.push({ type: 'info', text: 'Pursue an internship to add relevant experience to your profile.' });
+      }
+      if (!tips.length) {
+        tips.push({ type: 'success', text: 'Maintain your performance and continue upskilling in your chosen area.' });
+        tips.push({ type: 'success', text: 'Your profile supports applying to more selective opportunities.' });
+      }
+      return { backlog, placement, backlog_probability: +backlogProb.toFixed(1), placement_probability: +placementProb.toFixed(1), subjects, predicted_backlog_count: subjects.filter(s => s.at_risk).length, tips };
+    }
+
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      const button = document.querySelector('#predict');
+      const payload = Object.fromEntries(new FormData(form));
+      document.querySelectorAll('input,select').forEach(field => { if (field.id) payload[field.id] = field.value; });
+      payload.internship = internship;
+      payload.subjects = buildSubjectsPayload();
+      button.disabled = true;
+      button.innerHTML = '<i data-lucide="loader-circle" class="spin"></i>Assessing';
+      const style = document.createElement('style');
+      style.textContent = '.spin{animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}';
+      document.head.appendChild(style);
+      lucide.createIcons();
+      try {
+        let data;
+        try {
+          const response = await fetch('/predict', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+          if (!response.ok) throw new Error();
+          data = await response.json();
+        } catch (_) {
+          data = localPredict(payload);
+        }
+        showResults(data);
+      } finally {
+        button.disabled = false;
+        button.innerHTML = '<i data-lucide="sparkles"></i>Run assessment';
+        lucide.createIcons();
+      }
+    });
+
+    const SUBJECT_KEYS = ['ai', 'ml', 'cn', 'cd', 'web', 'mp'];
+
+    function buildSubjectsPayload() {
+      const subjects = {};
+      SUBJECT_KEYS.forEach(key => {
+        subjects[key] = {
+          internal: Number(document.querySelector('#' + key + '-internal').value),
+          hours: Number(document.querySelector('#' + key + '-hours').value)
+        };
+      });
+      return subjects;
+    }
+
+    function renderSubjects(subjects) {
+      const list = document.querySelector('#subject-list');
+      const riskCount = (subjects || []).filter(s => s.at_risk).length;
+      const badge = document.querySelector('#subject-count-badge');
+      badge.textContent = riskCount + ' at risk';
+      badge.classList.toggle('warn', riskCount > 0);
+
+      list.replaceChildren(...(subjects || []).map((subject, index) => {
+        const item = document.createElement('div');
+        item.className = 'subject-item ' + (subject.at_risk ? 'risk' : 'ok');
+        item.style.animationDelay = (index * 40) + 'ms';
+        item.innerHTML = '<span class="subject-dot"></span><span class="subject-name"></span><span class="subject-meta"></span><span class="subject-risk"></span>';
+        item.querySelector('.subject-name').textContent = subject.name;
+        item.querySelector('.subject-meta').textContent = 'Internal ' + subject.internal + ' / 40';
+        item.querySelector('.subject-risk').textContent = subject.at_risk ? Math.round(subject.probability || 0) + '% risk' : 'Clear';
+        return item;
+      }));
+    }
+
+    function showResults(data) {
+      document.querySelector('#api-note').classList.remove('visible');
+      document.querySelector('#empty-state').style.display = 'none';
+      document.querySelector('#result-content').classList.add('visible');
+
+      const backlogRisk = data.backlog === 1;
+      const placementGood = data.placement === 1;
+      setOutcome('backlog', data.backlog_probability,
+        backlogRisk ? 'At risk' : 'Low risk',
+        backlogRisk ? 'Strengthen academic consistency to reduce backlog exposure.' : 'Your current academic signals indicate low exposure.',
+        backlogRisk ? 'risk' : 'ok');
+      setOutcome('placement', data.placement_probability,
+        placementGood ? 'Promising' : 'Needs attention',
+        placementGood ? 'Your profile is moving in a placement-ready direction.' : 'Build the skills and experience employers look for.',
+        placementGood ? 'ok' : 'caution');
+
+      renderSubjects(data.subjects);
+
+      const tips = document.querySelector('#tips');
+      tips.replaceChildren(...(data.tips || []).map(tip => {
+        const row = document.createElement('div');
+        row.className = 'insight';
+        row.innerHTML = '<i data-lucide="arrow-up-right"></i><span></span>';
+        row.querySelector('span').textContent = tip.text;
+        return row;
+      }));
+      lucide.createIcons();
+    }
+
+    function setOutcome(name, probability, label, copy, state) {
+      const card = document.querySelector('#' + name + '-outcome');
+      card.className = 'outcome ' + state;
+      document.querySelector('#' + name + '-label').textContent = label;
+      document.querySelector('#' + name + '-copy').textContent = copy;
+      document.querySelector('#' + name + '-probability').textContent = Math.round(probability) + '%';
+      const value = Math.max(0, Math.min(100, probability));
+      requestAnimationFrame(() => {
+        document.querySelector('#' + name + '-meter').style.strokeDashoffset = CIRCUMFERENCE * (1 - value / 100);
+        document.querySelector('#' + name + '-bar').style.width = value + '%';
+      });
+    }
+
+        // Restore admin directory after a page reload that kept the admin session.
+        if (savedAdmin) loadAdminDirectory();
+
+        lucide.createIcons();
+     </script>
+    </body>
+
+</html>
