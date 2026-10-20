@@ -13,6 +13,8 @@ from pathlib import Path
 import joblib
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -94,8 +96,37 @@ def main() -> None:
 
     backlog_features = pd.concat([base_features, report_features], ignore_index=True)
     backlog_labels = pd.concat([base_backlog, report_backlog], ignore_index=True)
-    backlog_model = make_model().fit(backlog_features, backlog_labels)
-    placement_model = make_model().fit(base_features, placement)
+
+    # --- Backlog model: 80/20 split ---
+    X_b_train, X_b_test, y_b_train, y_b_test = train_test_split(
+        backlog_features, backlog_labels, test_size=0.2, random_state=42, stratify=backlog_labels
+    )
+    backlog_model = make_model().fit(X_b_train, y_b_train)
+    y_b_pred = backlog_model.predict(X_b_test)
+    backlog_eval = {
+        "train_size": int(len(X_b_train)),
+        "test_size": int(len(X_b_test)),
+        "accuracy": round(accuracy_score(y_b_test, y_b_pred), 4),
+        "classification_report": classification_report(y_b_test, y_b_pred, output_dict=True),
+        "confusion_matrix": confusion_matrix(y_b_test, y_b_pred).tolist(),
+    }
+
+    # --- Placement model: 80/20 split ---
+    X_p_train, X_p_test, y_p_train, y_p_test = train_test_split(
+        base_features, placement, test_size=0.2, random_state=42, stratify=placement
+    )
+    placement_model = make_model().fit(X_p_train, y_p_train)
+    y_p_pred = placement_model.predict(X_p_test)
+    placement_eval = {
+        "train_size": int(len(X_p_train)),
+        "test_size": int(len(X_p_test)),
+        "accuracy": round(accuracy_score(y_p_test, y_p_pred), 4),
+        "classification_report": classification_report(y_p_test, y_p_pred, output_dict=True),
+        "confusion_matrix": confusion_matrix(y_p_test, y_p_pred).tolist(),
+    }
+
+    print(f"Backlog  accuracy : {backlog_eval['accuracy']:.4f}")
+    print(f"Placement accuracy: {placement_eval['accuracy']:.4f}")
 
     joblib.dump(backlog_model, BASE_DIR / "backlog_model.pkl")
     joblib.dump(placement_model, BASE_DIR / "placement_model.pkl")
@@ -106,8 +137,16 @@ def main() -> None:
         "academic_report_records": int(len(report_features)),
         "backlog_training_records": int(len(backlog_features)),
         "placement_training_records": int(len(base_features)),
+        "evaluation": {
+            "backlog_model": backlog_eval,
+            "placement_model": placement_eval,
+        },
     })
     (BASE_DIR / "training_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
+    (BASE_DIR / "model_evaluation.json").write_text(
+        json.dumps({"backlog_model": backlog_eval, "placement_model": placement_eval}, indent=2),
+        encoding="utf-8",
+    )
     print(json.dumps(summary, indent=2))
 
 

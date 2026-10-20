@@ -62,7 +62,7 @@ app.get('/admin/students', (req, res) => {
   const min = req.query.minimumCgpa === undefined ? null : number(req.query.minimumCgpa);
   const students = Object.values(readProfiles()).filter(p => {
     const skills = type ? (p[type] || []) : [...(p.software || []), ...(p.hardware || []), ...(p.certificates || [])];
-    const searchable = [...skills, p.appliedCompany || ''].join(' ').toLowerCase();
+    const searchable = [...skills, p.appliedCompany || '', p.name || '', p.registerNumber || ''].join(' ').toLowerCase();
     return terms.every(t => searchable.includes(t)) && (min === null || number(p.cgpa) >= min);
   }).sort((a,b) => String(a.name).localeCompare(String(b.name)));
   res.json({ students });
@@ -81,7 +81,7 @@ app.post('/predict', (req, res) => {
   const backlogProb = Math.max(3, Math.min(97, 20 + (75-number(d.attendance))*0.9 + (6.5-number(d.cgpa))*13 + (4-number(d.study))*4 + (55-number(d.internal))*0.35));
   const placementProb = Math.max(3, Math.min(97, (number(d.cgpa)-5)*10 + number(d.communication)*3 + number(d.technical)*4 + number(d.coding)*4 + number(d.aptitude)*0.18 + number(d.projects)*5 + number(d.certifications)*3 + (d.internship === 'Yes' ? 10 : 0) - 25));
   const backlog = backlogProb >= 50 ? 1 : 0, placement = placementProb >= 55 ? 1 : 0;
-  const resultSubjects = subjects.map(([key,name]) => { const s=(d.subjects||{})[key]||{}; const internal=Math.max(0,Math.min(40,number(s.internal,d.internal))); const hours=Math.max(0,Math.min(15,number(s.hours,d.study))); const risk=backlog===1 && internal<24; return {key,name,internal,hours,at_risk:risk,probability:risk?85:15}; });
+  const resultSubjects = subjects.map(([key,name]) => { const s=(d.subjects||{})[key]||{}; const internal=Math.max(0,Math.min(40,number(s.internal,d.internal))); const hours=Math.max(0,Math.min(15,number(s.hours,d.study))); const risk_level=internal<24?'high':internal<28?'medium':'safe'; const at_risk=risk_level!=='safe'; const probability=risk_level==='high'?85:risk_level==='medium'?55:15; return {key,name,internal,hours,at_risk,risk_level,probability}; });
   res.json({ backlog, placement, backlog_probability:+backlogProb.toFixed(1), placement_probability:+placementProb.toFixed(1), subjects:resultSubjects, predicted_backlog_count:resultSubjects.filter(s=>s.at_risk).length, tips:tips(d,backlog,placement) });
 });
 app.get('*', (_req,res) => res.sendFile(path.join(BASE,'index.html')));

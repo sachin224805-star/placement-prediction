@@ -2,11 +2,17 @@ from flask import Flask, jsonify, request, send_from_directory, session
 from flask_cors import CORS
 import joblib
 import os
+import sqlite3
 import pandas as pd
 import json
 from datetime import datetime, timezone
 from uuid import uuid4
 from werkzeug.utils import secure_filename
+
+try:
+    import pymysql
+except ImportError:
+    pymysql = None
 
 SUBJECTS = [
     {"key": "ai", "name": "AI", "internal_col": "AI Total Internal", "hours_col": "AI Study Hours/Week"},
@@ -30,6 +36,16 @@ app.secret_key = os.environ.get("FLASK_SECRET_KEY", "change-this-local-placement
 ADMIN_USERNAME = os.environ.get("PLACEMENT_ADMIN_USERNAME", "placementadmin")
 ADMIN_PASSWORD = os.environ.get("PLACEMENT_ADMIN_PASSWORD", "Sahrdaya@2026")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+# --- Database config ---
+# Locally: SQLite file (placement.db) — no install needed.
+# On AWS:  set DB_HOST env var to use RDS MySQL instead.
+SQLITE_DB = os.path.join(BASE_DIR, "placement.db")
+DB_HOST = os.environ.get("DB_HOST")
+DB_PORT = int(os.environ.get("DB_PORT", "3306"))
+DB_USER = os.environ.get("DB_USER", "admin")
+DB_PASSWORD = os.environ.get("DB_PASSWORD")
+DB_NAME = os.environ.get("DB_NAME", "studentdb")
 DEPARTMENT_MAP = {"CE": 0, "CSE": 1, "ECE": 2, "EEE": 3, "IT": 4, "ME": 5}
 INTERNSHIP_MAP = {"No": 0, "Yes": 1}
 
@@ -43,18 +59,205 @@ def load_model(filename):
         return None
 
 
-def load_student_profiles():
-    # utf-8-sig tolerates a BOM that Windows editors sometimes add.
+# ---------------------------------------------------------------------------
+# SQLite helpers (local)
+# ---------------------------------------------------------------------------
+
+def get_sqlite():
+    conn = sqlite3.connect(SQLITE_DB)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def ensure_sqlite_schema():
+    with get_sqlite() as conn:
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS students (
+                register_number TEXT PRIMARY KEY,
+                name            TEXT NOT NULL,
+                software        TEXT DEFAULT '[]',
+                hardware        TEXT DEFAULT '[]',
+                certificates    TEXT DEFAULT '[]',
+                certificate_files TEXT DEFAULT '[]',
+                applied_company TEXT DEFAULT '',
+                cgpa            REAL,
+                updated_at      TEXT
+            )
+            """
+        )
+        conn.commit()
+
+
+def migrate_json_to_sqlite():
+    """One-time import of student_profiles.json into SQLite on first run."""
     try:
-        with open(STUDENT_PROFILES_FILE, encoding="utf-8-sig") as file:
-            return json.load(file)
+        with open(STUDENT_PROFILES_FILE, encoding="utf-8-sig") as f:
+            profiles = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return
+    if not profiles:
+        return
+    with get_sqlite() as conn:
+        existing = {row[0] for row in conn.execute("SELECT register_number FROM students")}
+        rows = [
+            (
+                p["registerNumber"], p["name"],
+                json.dumps(p.get("software", [])),
+                json.dumps(p.get("hardware", [])),
+                json.dumps(p.get("certificates", [])),
+                json.dumps(p.get("certificateFiles", [])),
+                p.get("appliedCompany", ""),
+                p.get("cgpa"),
+                p.get("updatedAt"),
+            )
+            for p in profiles.values()
+            if p.get("registerNumber") and p["registerNumber"] not in existing
+        ]
+        if rows:
+            conn.executemany(
+                "INSERT OR IGNORE INTO students VALUES (?,?,?,?,?,?,?,?,?)", rows
+            )
+            conn.commit()
+            print(f"Migrated {len(rows)} records from student_profiles.json -> placement.db")
+
+
+# ---------------------------------------------------------------------------
+# RDS (MySQL) helpers — only used on AWS when DB_HOST env var is set
+# ---------------------------------------------------------------------------
+
+def rds_enabled():
+    return bool(DB_HOST and DB_PASSWORD and pymysql is not None)
+
+
+def get_rds():
+    return pymysql.connect(
+        host=DB_HOST, port=DB_PORT, user=DB_USER, password=DB_PASSWORD,
+        database=DB_NAME, charset="utf8mb4", connect_timeout=5,
+        cursorclass=pymysql.cursors.DictCursor,
+    )
+
+
+def ensure_rds_schema():
+    if not rds_enabled():
+        return False
+    try:
+        with get_rds() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS students (
+                        register_number VARCHAR(30) PRIMARY KEY,
+                        name            VARCHAR(100) NOT NULL,
+                        software        TEXT,
+                        hardware        TEXT,
+                        certificates    TEXT,
+                        certificate_files TEXT,
+                        applied_company VARCHAR(150),
+                        cgpa            DECIMAL(4,2),
+                        updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                                        ON UPDATE CURRENT_TIMESTAMP
+                    )
+                    """
+                )
+        return True
+    except Exception as e:
+        print(f"RDS schema setup failed ({e}); using SQLite.")
+        return False
+
+
+# ---------------------------------------------------------------------------
+# Unified profile CRUD — RDS on AWS, SQLite locally
+# ---------------------------------------------------------------------------
+
+def to_list(value):
+    if not value:
+        return []
+    try:
+        return json.loads(value)
+    except (TypeError, json.JSONDecodeError):
+        return []
+
+
+def _row_to_profile(row):
+    return {
+        "registerNumber": row["register_number"],
+        "name": row["name"],
+        "software": to_list(row["software"]),
+        "hardware": to_list(row["hardware"]),
+        "certificates": to_list(row["certificates"]),
+        "certificateFiles": to_list(row["certificate_files"]),
+        "appliedCompany": row["applied_company"] or "",
+        "cgpa": float(row["cgpa"]) if row["cgpa"] is not None else None,
+        "updatedAt": str(row["updated_at"]) if row["updated_at"] else None,
+    }
+
+
+def db_save_profile(profile):
+    vals = (
+        profile["registerNumber"], profile["name"],
+        json.dumps(profile["software"]), json.dumps(profile["hardware"]),
+        json.dumps(profile["certificates"]), json.dumps(profile["certificateFiles"]),
+        profile["appliedCompany"],
+        profile["cgpa"] if profile["cgpa"] not in (None, "") else None,
+        profile["updatedAt"],
+    )
+    if rds_enabled():
+        with get_rds() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
+                    INSERT INTO students
+                        (register_number,name,software,hardware,certificates,
+                         certificate_files,applied_company,cgpa,updated_at)
+                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                    ON DUPLICATE KEY UPDATE
+                        name=VALUES(name), software=VALUES(software),
+                        hardware=VALUES(hardware), certificates=VALUES(certificates),
+                        certificate_files=VALUES(certificate_files),
+                        applied_company=VALUES(applied_company), cgpa=VALUES(cgpa)
+                    """, vals
+                )
+            conn.commit()
+    else:
+        with get_sqlite() as conn:
+            conn.execute(
+                """
+                INSERT INTO students VALUES (?,?,?,?,?,?,?,?,?)
+                ON CONFLICT(register_number) DO UPDATE SET
+                    name=excluded.name, software=excluded.software,
+                    hardware=excluded.hardware, certificates=excluded.certificates,
+                    certificate_files=excluded.certificate_files,
+                    applied_company=excluded.applied_company,
+                    cgpa=excluded.cgpa, updated_at=excluded.updated_at
+                """, vals
+            )
+            conn.commit()
+
+
+def db_load_all_profiles():
+    if rds_enabled():
+        with get_rds() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT * FROM students")
+                rows = cur.fetchall()
+        return {r["register_number"]: _row_to_profile(r) for r in rows}
+    else:
+        with get_sqlite() as conn:
+            rows = conn.execute("SELECT * FROM students").fetchall()
+        return {r["register_number"]: _row_to_profile(r) for r in rows}
+
+
+# ---------------------------------------------------------------------------
+# JSON file fallback (kept for read-only legacy access)
+# ---------------------------------------------------------------------------
+
+def load_student_profiles():
+    try:
+        with open(STUDENT_PROFILES_FILE, encoding="utf-8-sig") as f:
+            return json.load(f)
     except (OSError, json.JSONDecodeError):
         return {}
-
-
-def save_student_profiles(profiles):
-    with open(STUDENT_PROFILES_FILE, "w", encoding="utf-8") as file:
-        json.dump(profiles, file, indent=2)
 
 
 def clean_list(values):
@@ -110,8 +313,7 @@ def save_student_profile():
     if not name or not register_number:
         return jsonify({"error": "Student name and register number are required."}), 400
 
-    profiles = load_student_profiles()
-    profiles[register_number] = {
+    profile = {
         "name": name,
         "registerNumber": register_number,
         "software": clean_list(data.get("software", [])),
@@ -122,8 +324,13 @@ def save_student_profile():
         "cgpa": data.get("cgpa"),
         "updatedAt": datetime.now(timezone.utc).isoformat(),
     }
-    save_student_profiles(profiles)
-    return jsonify({"saved": True})
+
+    try:
+        db_save_profile(profile)
+        return jsonify({"saved": True, "store": "rds" if rds_enabled() else "sqlite"})
+    except Exception as error:
+        print(f"DB write failed ({error}).")
+        return jsonify({"error": "Could not save profile."}), 500
 
 
 @app.route("/admin/login", methods=["POST"])
@@ -149,7 +356,12 @@ def admin_students():
     terms = [term.lower() for term in request.args.get("skills", "").split() if term]
     skill_type = request.args.get("skillType", "all")
     minimum_cgpa = request.args.get("minimumCgpa", type=float)
-    profiles = list(load_student_profiles().values())
+
+    try:
+        profiles = list(db_load_all_profiles().values())
+    except Exception as error:
+        print(f"DB read failed ({error}); falling back to JSON.")
+        profiles = list(load_student_profiles().values())
 
     def matches(profile):
         scoped = profile.get(skill_type, []) if skill_type in {"software", "hardware", "certificates"} else (
@@ -318,6 +530,13 @@ def generate_tips(data, backlog, placement):
         ]
     return tips
 
+
+ensure_sqlite_schema()
+migrate_json_to_sqlite()
+if ensure_rds_schema():
+    print(f"RDS connected at {DB_HOST}:{DB_PORT}/{DB_NAME} - using MySQL.")
+else:
+    print("Using SQLite database: placement.db")
 
 if __name__ == "__main__":
     print("Server running at http://localhost:5000")

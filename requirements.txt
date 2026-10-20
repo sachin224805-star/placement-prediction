@@ -1,5 +1,7 @@
 flask
 flask-cors
+pymysql
+cryptography
 pandas
 scikit-learn
 joblib

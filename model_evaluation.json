@@ -1,0 +1,89 @@
+{
+  "dataset": "Student_Backlog_Placement_Dataset_No_Subject_Attendance.csv",
+  "total_records": 1000,
+  "split": "80% train / 20% test (stratified)",
+  "backlog_model": {
+    "train_size": 800,
+    "test_size": 200,
+    "accuracy": 0.9,
+    "classification_report": {
+      "False": {
+        "precision": 0.8888888888888888,
+        "recall": 0.9934640522875817,
+        "f1-score": 0.9382716049382716,
+        "support": 153.0
+      },
+      "True": {
+        "precision": 0.9655172413793104,
+        "recall": 0.5957446808510638,
+        "f1-score": 0.7368421052631579,
+        "support": 47.0
+      },
+      "accuracy": 0.9,
+      "macro avg": {
+        "precision": 0.9272030651340997,
+        "recall": 0.7946043665693228,
+        "f1-score": 0.8375568551007146,
+        "support": 200.0
+      },
+      "weighted avg": {
+        "precision": 0.906896551724138,
+        "recall": 0.9,
+        "f1-score": 0.8909356725146198,
+        "support": 200.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        152,
+        1
+      ],
+      [
+        19,
+        28
+      ]
+    ]
+  },
+  "placement_model": {
+    "train_size": 800,
+    "test_size": 200,
+    "accuracy": 0.825,
+    "classification_report": {
+      "False": {
+        "precision": 0.8723404255319149,
+        "recall": 0.780952380952381,
+        "f1-score": 0.8241206030150754,
+        "support": 105.0
+      },
+      "True": {
+        "precision": 0.7830188679245284,
+        "recall": 0.8736842105263158,
+        "f1-score": 0.8258706467661692,
+        "support": 95.0
+      },
+      "accuracy": 0.825,
+      "macro avg": {
+        "precision": 0.8276796467282217,
+        "recall": 0.8273182957393483,
+        "f1-score": 0.8249956248906223,
+        "support": 200.0
+      },
+      "weighted avg": {
+        "precision": 0.8299126856684063,
+        "recall": 0.825,
+        "f1-score": 0.824951873796845,
+        "support": 200.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        82,
+        23
+      ],
+      [
+        12,
+        83
+      ]
+    ]
+  }
+}
